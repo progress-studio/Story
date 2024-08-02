@@ -11,29 +11,29 @@ sealed class Variable: XMLEncodable {
         val equals: kotlin.Int,
         val moreThan: kotlin.Int,
         val lessThan: kotlin.Int,
-        val `true`: List<Action>?,
-        val `false`: List<Action>?
+        val `true`: List<Intent>?,
+        val `false`: List<Intent>?
     ): Variable()
 
     data class Boolean(
         val id: kotlin.String,
-        val `true`: List<Action>?,
-        val `false`: List<Action>?
+        val `true`: List<Intent>?,
+        val `false`: List<Intent>?
     ): Variable()
 
     data class String(
         val id: kotlin.String,
         val equals: kotlin.String,
-        val `true`: List<Action>?,
-        val `false`: List<Action>?
+        val `true`: List<Intent>?,
+        val `false`: List<Intent>?
     ): Variable()
 
     companion object: XMLDecodable<Variable> {
         override operator fun invoke(node: XMLNode): Variable {
             val id = node.attributes["id"]!!
             val children = node.childrenToMap()
-            val `true` = children.getValue("true") { Action(it) }
-            val `false` = children.getValue("false") { Action(it) }
+            val `true` = children.getValue("true") { Intent(it) }
+            val `false` = children.getValue("false") { Intent(it) }
             return when (node.tag) {
                 "int" -> Int(
                     id,

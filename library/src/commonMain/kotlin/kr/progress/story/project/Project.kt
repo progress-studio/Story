@@ -8,8 +8,8 @@ data class Project(
     val sounds: List<Resource>,
     val scenes: List<Scene>,
     val characters: List<Character>
-): XMLEncodable {
-    companion object: XMLDecodable<Project> {
+) : XMLEncodable {
+    companion object : XMLDecodable<Project> {
         override operator fun invoke(node: XMLNode): Project {
             val name = node.attributes["name"]!!
             val children = node.childrenToMap()
@@ -24,9 +24,7 @@ data class Project(
     override fun toXMLNode(): XMLNode {
         return XMLNode(
             "project",
-            mapOf(
-                "name" to name
-            ),
+            mapOf("name" to name),
             XMLBody.Children(
                 listOf(
                     XMLNode(

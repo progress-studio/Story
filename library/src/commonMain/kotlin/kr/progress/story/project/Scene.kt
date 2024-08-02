@@ -22,9 +22,7 @@ data class Scene(
     override fun toXMLNode(): XMLNode {
         return XMLNode(
             "scene",
-            mapOf(
-                "name" to name
-            ),
+            mapOf("name" to name),
             XMLBody.Children(
                 listOf(
                     XMLNode(

@@ -8,8 +8,8 @@ data class Character(
     val variable: List<Variable<Any>>,
     val base: List<Resource>,
     val overlay: List<Resource>
-): XMLEncodable {
-    companion object: XMLDecodable<Character> {
+) : XMLEncodable {
+    companion object : XMLDecodable<Character> {
         override operator fun invoke(node: XMLNode): Character {
             val id = node.attributes["id"]!!
             val name = node.attributes["name"]!!
