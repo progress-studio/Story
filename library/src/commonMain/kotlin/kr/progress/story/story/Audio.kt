@@ -24,6 +24,7 @@ data class Audio(
     override fun toXMLNode(): XMLNode {
         return XMLNode(
             tag = "audio",
+            attributes = mapOf("id" to id),
             body = body?.let {
                 XMLBody.Children(
                     body = body.map { it.toXMLNode() }

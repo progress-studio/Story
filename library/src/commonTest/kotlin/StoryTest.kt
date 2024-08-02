@@ -122,6 +122,6 @@ class StoryTest {
                 </scene>
             </story>
         """.trimIndent().toXMLNode()
-        println(Story(testData))
+        println(Story(testData).toXMLNode().toXMLString())
     }
 }

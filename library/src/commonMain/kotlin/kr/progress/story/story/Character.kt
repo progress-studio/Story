@@ -26,9 +26,11 @@ data class Character(
     override fun toXMLNode(): XMLNode {
         return XMLNode(
             tag = "character",
-            attributes = show?.let {
-                mapOf("show" to it.toString())
-            } ?: emptyMap(),
+            attributes = mapOf("id" to id).toMutableMap().apply {
+                show?.let {
+                    this["show"] = it.toString()
+                }
+            },
             body = body?.let {
                 XMLBody.Children(
                     body.map { it.toXMLNode() }
