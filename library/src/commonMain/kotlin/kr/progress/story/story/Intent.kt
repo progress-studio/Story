@@ -4,13 +4,10 @@ import kr.progress.story.parser.XMLDecodable
 import kr.progress.story.parser.XMLEncodable
 import kr.progress.story.parser.XMLNode
 
-sealed class Action: XMLEncodable {
-    data class Play(
-        val id: String
-    ): Action()
+sealed class Intent: XMLEncodable {
 
-    companion object: XMLDecodable<Action> {
-        override operator fun invoke(node: XMLNode): Action {
+    companion object: XMLDecodable<Intent> {
+        override operator fun invoke(node: XMLNode): Intent {
             TODO("Not yet implemented")
         }
     }

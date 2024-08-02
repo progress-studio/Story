@@ -1,40 +1,45 @@
 package kr.progress.story.story
 
-import kr.progress.story.parser.XMLBody
-import kr.progress.story.parser.XMLDecodable
-import kr.progress.story.parser.XMLEncodable
-import kr.progress.story.parser.XMLNode
+import kr.progress.story.parser.*
 
 data class Dialog(
-    val id: String,
-    val text: String
-): XMLEncodable {
-    sealed class Body
+    val body: DialogBody
+) : XMLEncodable {
 
-    data class Text(
-        val value: String
-    ): Body()
-
-    data class Choice(
-        val body: String,
-//        val
-    )
-    companion object: XMLDecodable<Dialog> {
+    companion object : XMLDecodable<Dialog> {
         override operator fun invoke(node: XMLNode): Dialog {
             val id = node.attributes["id"]!!
             val value = node.body as XMLBody.Value
             val body = value.body
-            return Dialog(id, body)
+            return when (node.body) {
+                is XMLBody.Value -> {
+
+                }
+
+                is XMLBody.Children -> {
+
+                }
+            }
         }
     }
 
     override fun toXMLNode(): XMLNode {
-        return XMLNode(
-            "dialog",
-            mapOf(
-                "id" to id
-            ),
-            XMLBody.Value(text)
-        )
+        return when (body) {
+            is DialogBody.Text -> {
+                XMLNode(
+                    "dialog",
+                    body = XMLBody.Value(body.value)
+                )
+            }
+
+            is DialogBody.Choice -> {
+                XMLNode(
+                    "dialog",
+                    body = XMLBody.Children(
+
+                    )
+                )
+            }
+        }
     }
 }
