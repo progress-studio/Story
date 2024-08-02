@@ -11,30 +11,27 @@ class Variable<T>(
 ) : XMLEncodable {
     companion object : XMLDecodable<Variable<Any>> {
         override operator fun invoke(node: XMLNode): Variable<Any> {
-            val id = node.attributes["id"]!!
-            val name = node.attributes["name"]!!
             val default = node.attributes["default"]!!
-            val convertedDefault = when (node.tag) {
-                "int" -> default.toInt()
-                "boolean" -> default.toBoolean()
-                else -> default
-            }
             return Variable(
-                id,
-                name,
-                convertedDefault
+                id = node.attributes["id"]!!,
+                name = node.attributes["name"]!!,
+                default = when (node.tag) {
+                    "int" -> default.toInt()
+                    "boolean" -> default.toBoolean()
+                    else -> default
+                }
             )
         }
     }
 
     override fun toXMLNode(): XMLNode {
         return XMLNode(
-            when (default!!::class) {
+            tag = when (default!!::class) {
                 Int::class -> "int"
                 Boolean::class -> "boolean"
                 else -> "string"
             },
-            mapOf(
+            attributes = mapOf(
                 "id" to id,
                 "name" to name,
                 "default" to default.toString()

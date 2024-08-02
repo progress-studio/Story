@@ -4,42 +4,43 @@ import kr.progress.story.parser.*
 
 data class Dialog(
     val body: DialogBody
-) : XMLEncodable {
-
+) : Intent() {
     companion object : XMLDecodable<Dialog> {
         override operator fun invoke(node: XMLNode): Dialog {
-            val id = node.attributes["id"]!!
-            val value = node.body as XMLBody.Value
-            val body = value.body
-            return when (node.body) {
-                is XMLBody.Value -> {
+            return Dialog(
+                body = when (node.body) {
+                    is XMLBody.Value -> {
+                        DialogBody.Text(body = node.body.body)
+                    }
 
+                    is XMLBody.Children -> {
+                        DialogBody.Choices(
+                            body = node.body.body.map {
+                                DialogBody.Choices.Choice(it)
+                            }
+                        )
+                    }
+
+                    else -> throw IllegalStateException()
                 }
-
-                is XMLBody.Children -> {
-
-                }
-            }
+            )
         }
     }
 
     override fun toXMLNode(): XMLNode {
-        return when (body) {
-            is DialogBody.Text -> {
-                XMLNode(
-                    "dialog",
-                    body = XMLBody.Value(body.value)
-                )
-            }
+        return XMLNode(
+            tag = "dialog",
+            body = when (body) {
+                is DialogBody.Text -> {
+                    XMLBody.Value(body = body.body)
+                }
 
-            is DialogBody.Choice -> {
-                XMLNode(
-                    "dialog",
-                    body = XMLBody.Children(
-
+                is DialogBody.Choices -> {
+                    XMLBody.Children(
+                        body = body.body.map { it.toXMLNode() }
                     )
-                )
+                }
             }
-        }
+        )
     }
 }

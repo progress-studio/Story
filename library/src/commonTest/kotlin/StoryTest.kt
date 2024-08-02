@@ -1,10 +1,13 @@
 import kr.progress.story.parser.toXMLNode
+import kr.progress.story.parser.toXMLString
+import kr.progress.story.project.Project
+import kr.progress.story.story.Story
 import kotlin.test.Test
 
 class StoryTest {
 
     @Test
-    fun encodeTest() {
+    fun projectTest() {
         val testData = """
             <?xml version="1.0" encoding="UTF-8"?>
             <project name="러브 앤 코드">
@@ -90,6 +93,35 @@ class StoryTest {
                 </characters>
             </project>
         """.trimIndent().toXMLNode()
-        print(testData)
+        print(Project(testData))
+    }
+
+    @Test
+    fun storyTest() {
+        val testData = """
+            <story id="1" name="만남">
+                <image id="school">
+                    <audio id="ost">
+                        <character id="mary" show="true">
+                            <overlay id="hi"/>
+                            <dialog>
+                                <choice body="안녕">
+                                    <dialog>그래?</dialog>
+                                </choice>
+                            </dialog>
+                        </character>
+                        <character id="mary" show="false"/>
+                        <dialog>해설</dialog>
+                    </audio>
+                </image>
+                <scene id="special_scene">
+                    <character id="mary">
+                        <overlay id="hi"/>
+                        <dialog>대사3</dialog>
+                    </character>
+                </scene>
+            </story>
+        """.trimIndent().toXMLNode()
+        println(Story(testData))
     }
 }

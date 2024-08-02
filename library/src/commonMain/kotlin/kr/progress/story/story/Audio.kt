@@ -2,35 +2,31 @@ package kr.progress.story.story
 
 import kr.progress.story.parser.XMLBody
 import kr.progress.story.parser.XMLDecodable
-import kr.progress.story.parser.XMLEncodable
 import kr.progress.story.parser.XMLNode
 
 data class Audio(
     val id: String,
     val body: List<Intent>? = null
-) : Intent(), XMLEncodable {
-
+) : Intent() {
     companion object : XMLDecodable<Audio> {
         override operator fun invoke(node: XMLNode): Audio {
-            val id = node.attributes["id"]!!
-            return when (node.body) {
-                is XMLBody.Children -> {
-                    Audio(id, body = node.body.body.map { Intent(it) })
+            return Audio(
+                id = node.attributes["id"]!!,
+                body = if (node.body is XMLBody.Children) {
+                    node.body.body.map { Intent(it) }
+                } else {
+                    null
                 }
-
-                else -> {
-                    Audio(id)
-                }
-            }
+            )
         }
     }
 
     override fun toXMLNode(): XMLNode {
         return XMLNode(
-            "audio",
+            tag = "audio",
             body = body?.let {
                 XMLBody.Children(
-                    body.map { it.toXMLNode() }
+                    body = body.map { it.toXMLNode() }
                 )
             }
         )

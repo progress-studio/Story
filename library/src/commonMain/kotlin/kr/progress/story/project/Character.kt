@@ -11,39 +11,40 @@ data class Character(
 ) : XMLEncodable {
     companion object : XMLDecodable<Character> {
         override operator fun invoke(node: XMLNode): Character {
-            val id = node.attributes["id"]!!
-            val name = node.attributes["name"]!!
             val children = node.childrenToMap()
-            val variable = children.getValue("variable") { Variable(it) }
-            val base = children.getValue("base") { Resource(it) }
-            val overlay = children.getValue("overlay") { Resource(it) }
-            return Character(id, name, variable, base, overlay)
+            return Character(
+                id = node.attributes["id"]!!,
+                name = node.attributes["name"]!!,
+                variable = children.getValue("variable") { Variable(it) },
+                base = children.getValue("base") { Resource(it) },
+                overlay = children.getValue("overlay") { Resource(it) }
+            )
         }
     }
 
     override fun toXMLNode(): XMLNode {
         return XMLNode(
-            "character",
-            mapOf(
+            tag = "character",
+            attributes = mapOf(
                 "id" to id,
                 "name" to name
             ),
-            XMLBody.Children(
+            body = XMLBody.Children(
                 listOf(
                     XMLNode(
-                        "variable",
+                        tag = "variable",
                         body = XMLBody.Children(
                             variable.map { it.toXMLNode() }
                         )
                     ),
                     XMLNode(
-                        "base",
+                        tag = "base",
                         body = XMLBody.Children(
                             base.map { it.toXMLNode() }
                         )
                     ),
                     XMLNode(
-                        "overlay",
+                        tag = "overlay",
                         body = XMLBody.Children(
                             overlay.map { it.toXMLNode() }
                         )

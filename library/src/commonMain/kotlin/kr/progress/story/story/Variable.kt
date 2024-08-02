@@ -5,7 +5,7 @@ import kr.progress.story.parser.XMLEncodable
 import kr.progress.story.parser.XMLNode
 import kr.progress.story.parser.getValue
 
-sealed class Variable: XMLEncodable {
+sealed class Variable : XMLEncodable {
     data class Int(
         val id: kotlin.String,
         val equals: kotlin.Int,
@@ -13,22 +13,22 @@ sealed class Variable: XMLEncodable {
         val lessThan: kotlin.Int,
         val `true`: List<Intent>?,
         val `false`: List<Intent>?
-    ): Variable()
+    ) : Variable()
 
     data class Boolean(
         val id: kotlin.String,
         val `true`: List<Intent>?,
         val `false`: List<Intent>?
-    ): Variable()
+    ) : Variable()
 
     data class String(
         val id: kotlin.String,
         val equals: kotlin.String,
         val `true`: List<Intent>?,
         val `false`: List<Intent>?
-    ): Variable()
+    ) : Variable()
 
-    companion object: XMLDecodable<Variable> {
+    companion object : XMLDecodable<Variable> {
         override operator fun invoke(node: XMLNode): Variable {
             val id = node.attributes["id"]!!
             val children = node.childrenToMap()
@@ -43,11 +43,13 @@ sealed class Variable: XMLEncodable {
                     `true`,
                     `false`
                 )
+
                 "boolean" -> Boolean(
                     id,
                     `true`,
                     `false`
                 )
+
                 else -> String(
                     id,
                     node.attributes["equals"]!!,
