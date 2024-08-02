@@ -11,42 +11,43 @@ data class Project(
 ) : XMLEncodable {
     companion object : XMLDecodable<Project> {
         override operator fun invoke(node: XMLNode): Project {
-            val name = node.attributes["name"]!!
             val children = node.childrenToMap()
-            val backgrounds = children.getValue("backgrounds") { Resource(it) }
-            val sounds = children.getValue("sounds") { Resource(it) }
-            val scenes = children.getValue("scenes") { Scene(it) }
-            val characters = children.getValue("characters") { Character(it) }
-            return Project(name, backgrounds, sounds, scenes, characters)
+            return Project(
+                name = node.attributes["name"]!!,
+                backgrounds = children.getValue("backgrounds") { Resource(it) },
+                sounds = children.getValue("sounds") { Resource(it) },
+                scenes = children.getValue("scenes") { Scene(it) },
+                characters = children.getValue("characters") { Character(it) }
+            )
         }
     }
 
     override fun toXMLNode(): XMLNode {
         return XMLNode(
-            "project",
-            mapOf("name" to name),
-            XMLBody.Children(
+            tag = "project",
+            attributes = mapOf("name" to name),
+            body = XMLBody.Children(
                 listOf(
                     XMLNode(
-                        "backgrounds",
+                        tag = "backgrounds",
                         body = XMLBody.Children(
                             backgrounds.map { it.toXMLNode() }
                         )
                     ),
                     XMLNode(
-                        "sounds",
+                        tag = "sounds",
                         body = XMLBody.Children(
                             sounds.map { it.toXMLNode() }
                         )
                     ),
                     XMLNode(
-                        "scenes",
+                        tag = "scenes",
                         body = XMLBody.Children(
                             scenes.map { it.toXMLNode() }
                         )
                     ),
                     XMLNode(
-                        "characters",
+                        tag = "characters",
                         body = XMLBody.Children(
                             characters.map { it.toXMLNode() }
                         )

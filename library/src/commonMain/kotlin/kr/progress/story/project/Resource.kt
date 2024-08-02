@@ -9,21 +9,22 @@ data class Resource(
     val name: String,
     val type: String,
     val src: String
-): XMLEncodable {
-    companion object: XMLDecodable<Resource> {
+) : XMLEncodable {
+    companion object : XMLDecodable<Resource> {
         override operator fun invoke(node: XMLNode): Resource {
-            val id = node.attributes["id"]!!
-            val name = node.attributes["name"]!!
-            val type = node.tag
-            val src = node.attributes["src"]!!
-            return Resource(id, name, type, src)
+            return Resource(
+                id = node.attributes["id"]!!,
+                name = node.attributes["name"]!!,
+                type = node.tag,
+                src = node.attributes["src"]!!
+            )
         }
     }
 
     override fun toXMLNode(): XMLNode {
         return XMLNode(
-            type,
-            mapOf(
+            tag = type,
+            attributes = mapOf(
                 "id" to id,
                 "name" to name,
                 "src" to src

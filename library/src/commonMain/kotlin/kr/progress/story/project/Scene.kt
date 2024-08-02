@@ -7,32 +7,32 @@ data class Scene(
     val name: String,
     val base: List<Resource>,
     val overlay: List<Resource>
-): XMLEncodable {
-    companion object: XMLDecodable<Scene> {
+) : XMLEncodable {
+    companion object : XMLDecodable<Scene> {
         override operator fun invoke(node: XMLNode): Scene {
-            val id = node.attributes["id"]!!
-            val name = node.attributes["name"]!!
             val children = node.childrenToMap()
-            val base = children.getValue("base") { Resource(it) }
-            val overlay = children.getValue("overlay") { Resource(it) }
-            return Scene(id, name, base, overlay)
+            return Scene(
+                id = node.attributes["id"]!!,
+                name = node.attributes["name"]!!,
+                base = children.getValue("base") { Resource(it) },
+                overlay = children.getValue("overlay") { Resource(it) })
         }
     }
 
     override fun toXMLNode(): XMLNode {
         return XMLNode(
-            "scene",
-            mapOf("name" to name),
-            XMLBody.Children(
+            tag = "scene",
+            attributes = mapOf("name" to name),
+            body = XMLBody.Children(
                 listOf(
                     XMLNode(
-                        "base",
+                        tag = "base",
                         body = XMLBody.Children(
                             base.map { it.toXMLNode() }
                         )
                     ),
                     XMLNode(
-                        "overlay",
+                        tag = "overlay",
                         body = XMLBody.Children(
                             overlay.map { it.toXMLNode() }
                         )
