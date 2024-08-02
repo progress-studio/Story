@@ -11,9 +11,8 @@ sealed class Intent : XMLEncodable {
                 "audio" -> Audio(node)
                 "character" -> Character(node)
                 "dialog" -> Dialog(node)
-                "image" -> Image(node)
+                "image", "scene" -> Background(node)
                 "overlay" -> Overlay(node)
-                "scene" -> Scene(node)
                 else -> throw IllegalStateException()
             }
         }
