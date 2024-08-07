@@ -1,7 +1,7 @@
 import kr.progress.story.parser.toXMLNode
 import kr.progress.story.parser.toXMLString
-import kr.progress.story.project.Project
-import kr.progress.story.story.Story
+import kr.progress.story.parser.project.Project
+import kr.progress.story.parser.story.Story
 import kotlin.test.Test
 
 class StoryTest {
@@ -122,6 +122,6 @@ class StoryTest {
                 </scene>
             </story>
         """.trimIndent().toXMLNode()
-        println(Story(testData).toXMLNode().toXMLString())
+        println(Story(testData))
     }
 }
