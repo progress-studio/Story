@@ -1,4 +1,4 @@
-package kr.progress.story.project
+package kr.progress.story.parser.project
 
 import kr.progress.story.parser.*
 

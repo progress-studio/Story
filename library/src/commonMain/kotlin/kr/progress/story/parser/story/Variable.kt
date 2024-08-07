@@ -1,4 +1,4 @@
-package kr.progress.story.story
+package kr.progress.story.parser.story
 
 import kr.progress.story.parser.XMLDecodable
 import kr.progress.story.parser.XMLEncodable
@@ -27,6 +27,12 @@ sealed class Variable : XMLEncodable {
         val `true`: List<Intent>?,
         val `false`: List<Intent>?
     ) : Variable()
+
+//    enum class IntExpression {
+//        EQUALS(val operand: kotlin.Int),
+//        MORETHAN(val operand: kotlin.Int),
+//        LESSTHAN(val operand: kotlin.Int)
+//    }
 
     companion object : XMLDecodable<Variable> {
         override operator fun invoke(node: XMLNode): Variable {
