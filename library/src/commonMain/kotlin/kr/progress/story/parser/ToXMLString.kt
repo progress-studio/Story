@@ -5,9 +5,10 @@ fun XMLNode.toXMLString(indentLevel: Int = 0): String {
     val attributesString = attributes.entries.joinToString(" ") { (key, value) ->
         """$key="$value""""
     }
+    val xmlHeader = if (indentLevel == 0) "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" else ""
     val attributesPart = if (attributesString.isNotEmpty()) " $attributesString" else ""
 
-    return when (body) {
+    return xmlHeader + when (body) {
         is XMLBody.Value -> {
             "$indent<$tag$attributesPart>${body.body}</$tag>"
         }
