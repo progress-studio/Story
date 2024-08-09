@@ -19,7 +19,7 @@ data class StringVariable(
 
     override fun toXMLNode(): XMLNode {
         return XMLNode(
-            tag = "boolean",
+            tag = "string",
             attributes = mapOf("id" to id) + when (body) {
                 is Body.Conditional -> body.value.associate {
                     when (it) {

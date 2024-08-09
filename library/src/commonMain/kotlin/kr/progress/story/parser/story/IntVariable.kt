@@ -19,7 +19,7 @@ data class IntVariable(
 
     override fun toXMLNode(): XMLNode {
         return XMLNode(
-            tag = "boolean",
+            tag = "int",
             attributes = mapOf("id" to id) + when (body) {
                 is Body.Conditional -> body.value.associate {
                     when (it) {
@@ -31,10 +31,10 @@ data class IntVariable(
 
                 is Body.Expression -> mapOf(
                     when (body.value) {
-                        is Body.Expression.SetValue -> "set"
-                        is Body.Expression.Increase -> "increase"
-                        is Body.Expression.Decrease -> "decrease"
-                    } to body.value.toString()
+                        is Body.Expression.SetValue -> "set" to body.value.operand.toString()
+                        is Body.Expression.Increase -> "increase" to body.value.operand.toString()
+                        is Body.Expression.Decrease -> "decrease" to body.value.operand.toString()
+                    }
                 )
             },
             body = if (body is Body.Conditional) body.condition.toChildren() else null
