@@ -3,6 +3,7 @@ package kr.progress.story.parser.project
 import kr.progress.story.parser.XMLDecodable
 import kr.progress.story.parser.XMLEncodable
 import kr.progress.story.parser.XMLNode
+import kr.progress.story.parser.story.Intent
 
 class Variable<T>(
     val id: String,
