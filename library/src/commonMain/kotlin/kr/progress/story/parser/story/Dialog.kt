@@ -9,17 +9,15 @@ data class Dialog(
         override operator fun invoke(node: XMLNode): Dialog {
             return Dialog(
                 body = when (node.body) {
-                    is XMLBody.Value -> {
-                        DialogBody.Text(body = node.body.body)
-                    }
+                    is XMLBody.Value -> DialogBody.Text(
+                        body = node.body.body
+                    )
 
-                    is XMLBody.Children -> {
-                        DialogBody.Choices(
-                            body = node.body.body.map {
-                                DialogBody.Choices.Choice(it)
-                            }
-                        )
-                    }
+                    is XMLBody.Children -> DialogBody.Choices(
+                        body = node.body.body.map {
+                            DialogBody.Choices.Choice(it)
+                        }
+                    )
 
                     else -> throw IllegalStateException()
                 }
@@ -31,15 +29,13 @@ data class Dialog(
         return XMLNode(
             tag = "dialog",
             body = when (body) {
-                is DialogBody.Text -> {
-                    XMLBody.Value(body = body.body)
-                }
+                is DialogBody.Text -> XMLBody.Value(
+                    body = body.body
+                )
 
-                is DialogBody.Choices -> {
-                    XMLBody.Children(
-                        body = body.body.map { it.toXMLNode() }
-                    )
-                }
+                is DialogBody.Choices -> XMLBody.Children(
+                    body = body.body.map { it.toXMLNode() }
+                )
             }
         )
     }

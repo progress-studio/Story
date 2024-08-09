@@ -19,19 +19,12 @@ data class BooleanVariable(
         return XMLNode(
             tag = "boolean",
             attributes = mapOf("id" to id) + when (body) {
-                is Body.Set -> mapOf(
+                is Body.Conditional -> emptyMap()
+                is Body.SetValue -> mapOf(
                     "set" to body.value.toString()
                 )
-
-                else -> emptyMap()
             },
-            body = when (body) {
-                is Body.Conditional -> {
-                    body.condition.toChildren()
-                }
-
-                else -> null
-            }
+            body = if (body is Body.Conditional) body.condition.toChildren() else null
         )
     }
 
@@ -39,13 +32,9 @@ data class BooleanVariable(
         companion object : XMLDecodable<Body> {
             override fun invoke(node: XMLNode): Body {
                 return when (node.body) {
-                    is XMLBody.Children -> {
-                        Conditional(Condition(node.childrenToMap()))
-                    }
-
-                    else -> {
-                        Set(node.attributes["set"]!!.toBoolean())
-                    }
+                    is XMLBody.Children -> Conditional(Condition(node.childrenToMap()))
+                    is XMLBody.Value -> throw IllegalStateException()
+                    null -> SetValue(node.attributes["set"]!!.toBoolean())
                 }
             }
         }
@@ -54,7 +43,7 @@ data class BooleanVariable(
             val condition: Condition
         ) : Body()
 
-        data class Set(
+        data class SetValue(
             val value: Boolean
         ) : Body()
     }

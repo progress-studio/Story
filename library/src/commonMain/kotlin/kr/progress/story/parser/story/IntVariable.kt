@@ -3,7 +3,6 @@ package kr.progress.story.parser.story
 import kr.progress.story.parser.XMLBody
 import kr.progress.story.parser.XMLDecodable
 import kr.progress.story.parser.XMLNode
-import kr.progress.story.parser.getValue
 
 data class IntVariable(
     val id: String,
@@ -18,23 +17,43 @@ data class IntVariable(
         }
     }
 
+    override fun toXMLNode(): XMLNode {
+        return XMLNode(
+            tag = "boolean",
+            attributes = mapOf("id" to id) + when (body) {
+                is Body.Conditional -> body.value.associate {
+                    when (it) {
+                        is Body.Conditional.Equals -> "equals" to it.operand.toString()
+                        is Body.Conditional.MoreThan -> "morethan" to it.operand.toString()
+                        is Body.Conditional.LessThan -> "lessthan" to it.operand.toString()
+                    }
+                }
+
+                is Body.Expression -> mapOf(
+                    when (body.value) {
+                        is Body.Expression.SetValue -> "set"
+                        is Body.Expression.Increase -> "increase"
+                        is Body.Expression.Decrease -> "decrease"
+                    } to body.value.toString()
+                )
+            },
+            body = if (body is Body.Conditional) body.condition.toChildren() else null
+        )
+    }
+
     sealed class Body {
         companion object : XMLDecodable<Body> {
             override fun invoke(node: XMLNode): Body {
                 return when (node.body) {
-                    is XMLBody.Children -> {
-                        Conditional(node)
-                    }
-
-                    else -> {
-                        Expression(node)
-                    }
+                    is XMLBody.Children -> Conditional(node)
+                    is XMLBody.Value -> throw IllegalStateException()
+                    null -> Expression(node)
                 }
             }
         }
 
         data class Conditional(
-            val value: List<Value>,
+            val value: Set<Value>,
             val condition: Condition
         ) : Body() {
             companion object : XMLDecodable<Conditional> {
@@ -42,21 +61,12 @@ data class IntVariable(
                     return Conditional(
                         value = node.attributes.mapNotNull { (key, value) ->
                             when (key) {
-                                "equals" -> {
-                                    Equals(value.toInt())
-                                }
-
-                                "morethan" -> {
-                                    MoreThan(value.toInt())
-                                }
-
-                                "lessthan" -> {
-                                    LessThan(value.toInt())
-                                }
-
+                                "equals" -> Equals(value.toInt())
+                                "morethan" -> MoreThan(value.toInt())
+                                "lessthan" -> LessThan(value.toInt())
                                 else -> null
                             }
-                        },
+                        }.toSet(),
                         condition = Condition(node.childrenToMap())
                     )
                 }
@@ -76,18 +86,9 @@ data class IntVariable(
                     return Expression(
                         value = node.attributes.firstNotNullOf { (key, value) ->
                             when (key) {
-                                "set" -> {
-                                    Set(value.toInt())
-                                }
-
-                                "increase" -> {
-                                    Increase(value.toInt())
-                                }
-
-                                "decrease" -> {
-                                    Decrease(value.toInt())
-                                }
-
+                                "set" -> SetValue(value.toInt())
+                                "increase" -> Increase(value.toInt())
+                                "decrease" -> Decrease(value.toInt())
                                 else -> null
                             }
                         }
@@ -96,7 +97,7 @@ data class IntVariable(
             }
 
             sealed class Value
-            data class Set(val operand: Int) : Value()
+            data class SetValue(val operand: Int) : Value()
             data class Increase(val operand: Int) : Value()
             data class Decrease(val operand: Int) : Value()
         }

@@ -3,7 +3,6 @@ package kr.progress.story.parser.story
 import kr.progress.story.parser.XMLBody
 import kr.progress.story.parser.XMLDecodable
 import kr.progress.story.parser.XMLNode
-import kr.progress.story.parser.getValue
 
 data class StringVariable(
     val id: String,
@@ -18,23 +17,39 @@ data class StringVariable(
         }
     }
 
+    override fun toXMLNode(): XMLNode {
+        return XMLNode(
+            tag = "boolean",
+            attributes = mapOf("id" to id) + when (body) {
+                is Body.Conditional -> body.value.associate {
+                    when (it) {
+                        is Body.Conditional.Equals -> "equals" to it.operand
+                        is Body.Conditional.StartsWith -> "startswith" to it.operand
+                        is Body.Conditional.EndsWith -> "endswith" to it.operand
+                    }
+                }
+
+                is Body.SetValue -> mapOf(
+                    "set" to body.value
+                )
+            },
+            body = if (body is Body.Conditional) body.condition.toChildren() else null
+        )
+    }
+
     sealed class Body {
         companion object : XMLDecodable<Body> {
             override fun invoke(node: XMLNode): Body {
                 return when (node.body) {
-                    is XMLBody.Children -> {
-                        Conditional(node)
-                    }
-
-                    else -> {
-                        Expression(node)
-                    }
+                    is XMLBody.Children -> Conditional(node)
+                    is XMLBody.Value -> throw IllegalStateException()
+                    null -> SetValue(node.attributes["set"]!!)
                 }
             }
         }
 
         data class Conditional(
-            val value: List<Value>,
+            val value: Set<Value>,
             val condition: Condition
         ) : Body() {
             companion object : XMLDecodable<Conditional> {
@@ -42,13 +57,12 @@ data class StringVariable(
                     return Conditional(
                         value = node.attributes.mapNotNull { (key, value) ->
                             when (key) {
-                                "equals" -> {
-                                    Equals(value)
-                                }
-
+                                "equals" -> Equals(value)
+                                "startswith" -> StartsWith(value)
+                                "endswith" -> EndsWith(value)
                                 else -> null
                             }
-                        },
+                        }.toSet(),
                         condition = Condition(node.childrenToMap())
                     )
                 }
@@ -60,27 +74,8 @@ data class StringVariable(
             data class EndsWith(val operand: String) : Value()
         }
 
-        data class Expression(
-            val value: Value
-        ) : Body() {
-            companion object : XMLDecodable<Expression> {
-                override fun invoke(node: XMLNode): Expression {
-                    return Expression(
-                        value = node.attributes.firstNotNullOf { (key, value) ->
-                            when (key) {
-                                "set" -> {
-                                    Set(value)
-                                }
-
-                                else -> null
-                            }
-                        }
-                    )
-                }
-            }
-
-            sealed class Value
-            data class Set(val operand: String) : Value()
-        }
+        data class SetValue(
+            val value: String
+        ) : Body()
     }
 }
