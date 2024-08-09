@@ -13,6 +13,7 @@ sealed class Intent : XMLEncodable {
                 "dialog" -> Dialog(node)
                 "image", "scene" -> Background(node)
                 "overlay" -> Overlay(node)
+                "int", "boolean", "string" -> Variable(node)
                 else -> throw IllegalStateException()
             }
         }

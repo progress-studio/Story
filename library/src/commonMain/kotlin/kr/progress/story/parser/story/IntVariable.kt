@@ -1,10 +1,9 @@
-package kr.progress.story.parser.story.variable
+package kr.progress.story.parser.story
 
 import kr.progress.story.parser.XMLBody
 import kr.progress.story.parser.XMLDecodable
 import kr.progress.story.parser.XMLNode
 import kr.progress.story.parser.getValue
-import kr.progress.story.parser.story.Intent
 
 data class IntVariable(
     val id: String,
@@ -24,7 +23,7 @@ data class IntVariable(
             override fun invoke(node: XMLNode): Body {
                 return when (node.body) {
                     is XMLBody.Children -> {
-                        Condition(node)
+                        Conditional(node)
                     }
 
                     else -> {
@@ -34,15 +33,13 @@ data class IntVariable(
             }
         }
 
-        data class Condition(
+        data class Conditional(
             val value: List<Value>,
-            val `true`: List<Intent>?,
-            val `false`: List<Intent>?,
+            val condition: Condition
         ) : Body() {
-            companion object : XMLDecodable<Condition> {
-                override fun invoke(node: XMLNode): Condition {
-                    val children = node.childrenToMap()
-                    return Condition(
+            companion object : XMLDecodable<Conditional> {
+                override fun invoke(node: XMLNode): Conditional {
+                    return Conditional(
                         value = node.attributes.mapNotNull { (key, value) ->
                             when (key) {
                                 "equals" -> {
@@ -60,8 +57,7 @@ data class IntVariable(
                                 else -> null
                             }
                         },
-                        `true` = children.getValue("true") { Intent(it) },
-                        `false` = children.getValue("false") { Intent(it) }
+                        condition = Condition(node.childrenToMap())
                     )
                 }
             }
