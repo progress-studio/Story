@@ -5,7 +5,7 @@ import kr.progress.story.parser.*
 data class Character(
     val id: String,
     val name: String,
-    val variable: List<Variable<Any>>,
+    val variable: List<Variable>,
     val base: List<Resource>,
     val overlay: List<Resource>
 ) : XMLEncodable {
