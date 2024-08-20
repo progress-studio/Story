@@ -5,14 +5,14 @@ import kr.progress.story.parser.XMLNode
 import kr.progress.story.parser.getValue
 
 data class Condition(
-    val `true`: List<Intent>?,
-    val `false`: List<Intent>?
+    val ifTrue: List<Intent>?,
+    val ifFalse: List<Intent>?
 ) {
     companion object {
         operator fun invoke(childrenMap: Map<String, List<XMLBody>>): Condition {
             return Condition(
-                `true` = childrenMap.getValue("true") { Intent(it) },
-                `false` = childrenMap.getValue("false") { Intent(it) }
+                ifTrue = childrenMap.getValue("true") { Intent(it) },
+                ifFalse = childrenMap.getValue("false") { Intent(it) }
             )
         }
     }
@@ -20,16 +20,16 @@ data class Condition(
     fun toChildren(): XMLBody.Children {
         return XMLBody.Children(
             listOfNotNull(
-                `true`?.let {
+                ifTrue?.let {
                     XMLNode(
                         tag = "true",
-                        body = XMLBody.Children(`true`.map { it.toXMLNode() })
+                        body = XMLBody.Children(ifTrue.map { it.toXMLNode() })
                     )
                 },
-                `false`?.let {
+                ifFalse?.let {
                     XMLNode(
                         tag = "false",
-                        body = XMLBody.Children(`false`.map { it.toXMLNode() })
+                        body = XMLBody.Children(ifFalse.map { it.toXMLNode() })
                     )
                 }
             )
