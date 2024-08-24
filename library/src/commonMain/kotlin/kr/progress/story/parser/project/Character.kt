@@ -3,12 +3,12 @@ package kr.progress.story.parser.project
 import kr.progress.story.parser.*
 
 data class Character(
-    val id: String,
+    override val id: String,
     val name: String,
     val variable: List<Variable>,
     val base: List<Resource>,
     val overlay: List<Resource>
-) : XMLEncodable {
+) : XMLEncodable, Identifiable {
     companion object : XMLDecodable<Character> {
         override operator fun invoke(node: XMLNode): Character {
             val children = node.childrenToMap()

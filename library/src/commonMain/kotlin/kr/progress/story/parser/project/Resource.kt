@@ -5,11 +5,11 @@ import kr.progress.story.parser.XMLEncodable
 import kr.progress.story.parser.XMLNode
 
 data class Resource(
-    val id: String,
+    override val id: String,
     val name: String,
     val type: String,
     val src: String
-) : XMLEncodable {
+) : XMLEncodable, Identifiable {
     companion object : XMLDecodable<Resource> {
         override operator fun invoke(node: XMLNode): Resource {
             return Resource(

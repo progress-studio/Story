@@ -8,7 +8,7 @@ import kr.progress.story.parser.XMLNode
 data class Story(
     val id: String,
     val name: String,
-    val body: List<Background>
+    val body: List<Intent>
 ) : XMLEncodable {
     companion object : XMLDecodable<Story> {
         override operator fun invoke(node: XMLNode): Story {
@@ -16,7 +16,7 @@ data class Story(
             return Story(
                 id = node.attributes["id"]!!,
                 name = node.attributes["name"]!!,
-                body = body.body.map { Background(it) }
+                body = body.body.map { Intent(it) }
             )
         }
     }

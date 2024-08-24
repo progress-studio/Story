@@ -4,7 +4,7 @@ import kr.progress.story.parser.XMLDecodable
 import kr.progress.story.parser.XMLNode
 
 data class BooleanVariable(
-    val id: String,
+    override val id: String,
     val name: String,
     val default: Boolean
 ) : Variable() {
