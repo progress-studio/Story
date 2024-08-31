@@ -13,7 +13,7 @@ data class IntVariable(
             return IntVariable(
                 id = node.attributes["id"]!!,
                 name = node.attributes["name"]!!,
-                default = node.attributes["default"]!!.toInt()
+                default = node.attributes["default"]?.toInt() ?: 0
             )
         }
     }

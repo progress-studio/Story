@@ -13,7 +13,7 @@ data class BooleanVariable(
             return BooleanVariable(
                 id = node.attributes["id"]!!,
                 name = node.attributes["name"]!!,
-                default = node.attributes["default"]!!.toBoolean()
+                default = node.attributes["default"]?.toBoolean() ?: false
             )
         }
     }

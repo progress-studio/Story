@@ -4,6 +4,7 @@ import kr.progress.story.parser.*
 
 data class Project(
     val name: String,
+    val variables: List<Variable>,
     val backgrounds: List<Resource>,
     val sounds: List<Resource>,
     val scenes: List<Scene>,
@@ -14,6 +15,7 @@ data class Project(
             val children = node.childrenToMap()
             return Project(
                 name = node.attributes["name"]!!,
+                variables = children.getValue("variables") { Variable(it) },
                 backgrounds = children.getValue("backgrounds") { Resource(it) },
                 sounds = children.getValue("sounds") { Resource(it) },
                 scenes = children.getValue("scenes") { Scene(it) },
@@ -28,6 +30,12 @@ data class Project(
             attributes = mapOf("name" to name),
             body = XMLBody.Children(
                 listOf(
+                    XMLNode(
+                        tag = "variables",
+                        body = XMLBody.Children(
+                            backgrounds.map { it.toXMLNode() }
+                        )
+                    ),
                     XMLNode(
                         tag = "backgrounds",
                         body = XMLBody.Children(

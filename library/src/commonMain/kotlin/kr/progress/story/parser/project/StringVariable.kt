@@ -13,7 +13,7 @@ data class StringVariable(
             return StringVariable(
                 id = node.attributes["id"]!!,
                 name = node.attributes["name"]!!,
-                default = node.attributes["default"]!!
+                default = node.attributes["default"].orEmpty()
             )
         }
     }

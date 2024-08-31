@@ -5,6 +5,29 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     id("module.publication")
+    id("maven-publish")
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "OSSRH"
+            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+            credentials {
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
+            }
+        }
+    }
+    publications {
+        create<MavenPublication>("relocation") {
+            pom {
+                groupId = "kr.progress.story"
+                artifactId = "story"
+                version = "0.0.1"
+            }
+        }
+    }
 }
 
 kotlin {
