@@ -1,9 +1,8 @@
-import kr.progress.story.parser.persona.Persona
+import kr.progress.story.format.persona.Persona
 import kr.progress.story.parser.toXMLNode
 import kr.progress.story.parser.toXMLString
-import kr.progress.story.parser.project.Project
-import kr.progress.story.parser.save.Save
-import kr.progress.story.parser.story.Story
+import kr.progress.story.format.save.Save
+import kr.progress.story.format.story.Story
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -92,7 +91,7 @@ class StoryTest {
                 </characters>
             </project>
         """.trimIndent()
-        val output = Project(testData.toXMLNode()).toXMLNode().toXMLString()
+        val output = kr.progress.story.format.project.Project(testData.toXMLNode()).toXMLNode().toXMLString()
         assertEquals(testData, output)
     }
 
