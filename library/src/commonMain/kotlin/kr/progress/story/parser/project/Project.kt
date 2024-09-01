@@ -33,7 +33,7 @@ data class Project(
                     XMLNode(
                         tag = "variables",
                         body = XMLBody.Children(
-                            backgrounds.map { it.toXMLNode() }
+                            variables.map { it.toXMLNode() }
                         )
                     ),
                     XMLNode(

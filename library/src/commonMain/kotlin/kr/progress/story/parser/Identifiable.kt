@@ -1,4 +1,4 @@
-package kr.progress.story.parser.project
+package kr.progress.story.parser
 
 interface Identifiable {
     val id: String

@@ -1,17 +1,42 @@
+import kr.progress.story.parser.persona.Persona
 import kr.progress.story.parser.toXMLNode
 import kr.progress.story.parser.toXMLString
 import kr.progress.story.parser.project.Project
+import kr.progress.story.parser.save.Save
 import kr.progress.story.parser.story.Story
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class StoryTest {
+    @Test
+    fun personaTest() {
+        val testData = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <persona>
+                <character id="john_doe">
+                    <informations>
+                        <info name="from">Sunnyvale</info>
+                    </informations>
+                </character>
+                <character id="jane_doe">
+                    <informations>
+                        <info name="from">Santa Clara</info>
+                    </informations>
+                </character>
+            </persona>
+        """.trimIndent()
+        val output = Persona(testData.toXMLNode()).toXMLNode().toXMLString()
+        assertEquals(testData, output)
+    }
 
     @Test
     fun projectTest() {
         val testData = """
             <?xml version="1.0" encoding="UTF-8"?>
             <project name="Lorem Ipsum Dolor">
+                <variables>
+                    <string id="name" name="Name"/>
+                </variables>
                 <backgrounds>
                     <image id="school" name="School" src="school.png"/>
                 </backgrounds>
@@ -72,11 +97,33 @@ class StoryTest {
     }
 
     @Test
+    fun saveTest() {
+        val testData = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <save>
+                <variables>
+                    <string id="name">steve</string>
+                </variables>
+                <characters>
+                    <character id="john_doe">
+                        <int id="favorable">1</int>
+                    </character>
+                    <character id="jane_doe">
+                        <int id="favorable">2</int>
+                    </character>
+                </characters>
+            </save>
+        """.trimIndent()
+        val output = Save(testData.toXMLNode()).toXMLNode().toXMLString()
+        assertEquals(testData, output)
+    }
+
+    @Test
     fun storyTest() {
         val testData = """
             <?xml version="1.0" encoding="UTF-8"?>
             <story id="1" name="Story 1">
-                <image id="school">
+                <background id="school">
                     <audio id="ost">
                         <character id="john_doe" show="true">
                             <overlay id="hi"/>
@@ -106,7 +153,7 @@ class StoryTest {
                         <character id="john_doe" show="false"/>
                         <dialog>Dialog</dialog>
                     </audio>
-                </image>
+                </background>
                 <scene id="special_scene">
                     <character id="john_doe">
                         <overlay id="hi"/>

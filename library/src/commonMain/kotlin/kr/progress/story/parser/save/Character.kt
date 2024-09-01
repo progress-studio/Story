@@ -1,18 +1,17 @@
-package kr.progress.story.parser.persona
+package kr.progress.story.parser.save
 
 import kr.progress.story.parser.*
-import kr.progress.story.parser.Identifiable
 
 data class Character(
     override val id: String,
-    val informations: List<Info>,
+    val variables: List<Variable>
 ) : XMLEncodable, Identifiable {
     companion object : XMLDecodable<Character> {
         override operator fun invoke(node: XMLNode): Character {
-            val children = node.childrenToMap()
+            val body = node.body as XMLBody.Children
             return Character(
                 id = node.attributes["id"]!!,
-                informations = children.getValue("informations") { Info(it) },
+                variables = body.body.map { Variable(it) }
             )
         }
     }
@@ -22,14 +21,7 @@ data class Character(
             tag = "character",
             attributes = mapOf("id" to id),
             body = XMLBody.Children(
-                listOf(
-                    XMLNode(
-                        tag = "informations",
-                        body = XMLBody.Children(
-                            informations.map { it.toXMLNode() }
-                        )
-                    )
-                )
+                variables.map { it.toXMLNode() }
             )
         )
     }

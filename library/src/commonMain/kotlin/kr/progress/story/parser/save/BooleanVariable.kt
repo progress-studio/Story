@@ -1,19 +1,18 @@
-package kr.progress.story.parser.project
+package kr.progress.story.parser.save
 
+import kr.progress.story.parser.XMLBody
 import kr.progress.story.parser.XMLDecodable
 import kr.progress.story.parser.XMLNode
 
 data class BooleanVariable(
     override val id: String,
-    val name: String,
-    val default: Boolean?
+    val value: Boolean
 ) : Variable() {
     companion object : XMLDecodable<BooleanVariable> {
         override operator fun invoke(node: XMLNode): BooleanVariable {
             return BooleanVariable(
                 id = node.attributes["id"]!!,
-                name = node.attributes["name"]!!,
-                default = node.attributes["default"]?.toBoolean()
+                value = (node.body as XMLBody.Value).body.toBoolean()
             )
         }
     }
@@ -21,14 +20,8 @@ data class BooleanVariable(
     override fun toXMLNode(): XMLNode {
         return XMLNode(
             tag = "boolean",
-            attributes = mutableMapOf(
-                "id" to id,
-                "name" to name
-            ).apply {
-                default?.toString()?.let {
-                    this["default"] = it
-                }
-            }
+            attributes = mapOf("id" to id),
+            body = XMLBody.Value(value.toString())
         )
     }
 }

@@ -1,5 +1,6 @@
 package kr.progress.story.parser.project
 
+import kr.progress.story.parser.Identifiable
 import kr.progress.story.parser.XMLDecodable
 import kr.progress.story.parser.XMLEncodable
 import kr.progress.story.parser.XMLNode
