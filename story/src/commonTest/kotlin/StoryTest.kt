@@ -89,6 +89,9 @@ class StoryTest {
                         </overlay>
                     </character>
                 </characters>
+                <stories>
+                    <story id="1" src="story1.xml"/>
+                </stories>
             </project>
         """.trimIndent()
         val output = kr.progress.story.format.project.Project(testData.toXMLNode()).toXMLNode().toXMLString()

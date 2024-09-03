@@ -4,22 +4,24 @@ import kr.progress.story.parser.*
 
 data class Project(
     val name: String,
-    val variables: List<kr.progress.story.format.project.Variable>,
-    val backgrounds: List<kr.progress.story.format.project.Resource>,
-    val sounds: List<kr.progress.story.format.project.Resource>,
-    val scenes: List<kr.progress.story.format.project.Scene>,
-    val characters: List<kr.progress.story.format.project.Character>
+    val variables: List<Variable>,
+    val backgrounds: List<Resource>,
+    val sounds: List<Resource>,
+    val scenes: List<Scene>,
+    val characters: List<Character>,
+    val stories: List<Story>
 ) : XMLEncodable {
-    companion object : XMLDecodable<kr.progress.story.format.project.Project> {
-        override operator fun invoke(node: XMLNode): kr.progress.story.format.project.Project {
+    companion object : XMLDecodable<Project> {
+        override operator fun invoke(node: XMLNode): Project {
             val children = node.childrenToMap()
-            return kr.progress.story.format.project.Project(
+            return Project(
                 name = node.attributes["name"]!!,
-                variables = children.getValue("variables") { kr.progress.story.format.project.Variable(it) },
-                backgrounds = children.getValue("backgrounds") { kr.progress.story.format.project.Resource(it) },
-                sounds = children.getValue("sounds") { kr.progress.story.format.project.Resource(it) },
-                scenes = children.getValue("scenes") { kr.progress.story.format.project.Scene(it) },
-                characters = children.getValue("characters") { kr.progress.story.format.project.Character(it) }
+                variables = children.getValue("variables") { Variable(it) },
+                backgrounds = children.getValue("backgrounds") { Resource(it) },
+                sounds = children.getValue("sounds") { Resource(it) },
+                scenes = children.getValue("scenes") { Scene(it) },
+                characters = children.getValue("characters") { Character(it) },
+                stories = children.getValue("stories") { Story(it) }
             )
         }
     }
@@ -58,6 +60,12 @@ data class Project(
                         tag = "characters",
                         body = XMLBody.Children(
                             characters.map { it.toXMLNode() }
+                        )
+                    ),
+                    XMLNode(
+                        tag = "stories",
+                        body = XMLBody.Children(
+                            stories.map { it.toXMLNode() }
                         )
                     )
                 )

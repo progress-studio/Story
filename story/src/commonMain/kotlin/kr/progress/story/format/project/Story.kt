@@ -1,4 +1,4 @@
-package kr.progress.story.format.save
+package kr.progress.story.format.project
 
 import kr.progress.story.parser.Identifiable
 import kr.progress.story.parser.XMLDecodable
@@ -6,12 +6,14 @@ import kr.progress.story.parser.XMLEncodable
 import kr.progress.story.parser.XMLNode
 
 data class Story(
-    override val id: String
+    override val id: String,
+    val src: String
 ) : XMLEncodable, Identifiable {
     companion object : XMLDecodable<Story> {
         override operator fun invoke(node: XMLNode): Story {
             return Story(
-                id = node.attributes["id"]!!
+                id = node.attributes["id"]!!,
+                src = node.attributes["src"]!!
             )
         }
     }
@@ -19,7 +21,10 @@ data class Story(
     override fun toXMLNode(): XMLNode {
         return XMLNode(
             tag = "story",
-            attributes = mapOf("id" to id)
+            attributes = mapOf(
+                "id" to id,
+                "src" to src
+            )
         )
     }
 }
