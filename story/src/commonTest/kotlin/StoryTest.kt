@@ -100,6 +100,7 @@ class StoryTest {
         val testData = """
             <?xml version="1.0" encoding="UTF-8"?>
             <save>
+                <story id="1"/>
                 <variables>
                     <string id="name">steve</string>
                 </variables>
