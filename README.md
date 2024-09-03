@@ -3,3 +3,15 @@
 [![MIT License](https://img.shields.io/badge/license-MIT%20License-blue.svg?style=flat)](https://opensource.org/license/mit)
 
 Story is XML-based Story Format Processor for Kotlin Multiplatform projects.
+
+## Installation
+### via Gradle
+```kts
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("kr.progress.story:story:0.0.1")
+}
+```
