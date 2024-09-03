@@ -7,10 +7,8 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
-    id("module.publication")
     id("com.vanniktech.maven.publish") version "0.29.0"
     id("maven-publish")
-    id("signing")
 }
 
 mavenPublishing {
@@ -21,7 +19,7 @@ mavenPublishing {
     )
     configure(
         KotlinMultiplatform(
-            javadocJar = JavadocJar.None(),
+            javadocJar = JavadocJar.Empty(),
             sourcesJar = true,
             androidVariantsToPublish = listOf("release")
         )
@@ -57,14 +55,6 @@ mavenPublishing {
     }
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
     signAllPublications()
-}
-
-signing {
-    useInMemoryPgpKeys(
-        System.getenv("GPG_PRIVATE_KEY"),
-        System.getenv("GPG_PRIVATE_PASSWORD")
-    )
-    sign(publishing.publications)
 }
 
 kotlin {
