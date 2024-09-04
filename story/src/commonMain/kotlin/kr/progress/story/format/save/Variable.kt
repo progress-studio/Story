@@ -15,5 +15,18 @@ sealed class Variable : XMLEncodable, Identifiable {
                 else -> throw IllegalStateException()
             }
         }
+
+        fun new(
+            from: kr.progress.story.format.project.Variable
+        ): Variable {
+            return when (from) {
+                is kr.progress.story.format.project.IntVariable ->
+                    IntVariable.new(from)
+                is kr.progress.story.format.project.BooleanVariable ->
+                    BooleanVariable.new(from)
+                is kr.progress.story.format.project.StringVariable ->
+                    StringVariable.new(from)
+            }
+        }
     }
 }

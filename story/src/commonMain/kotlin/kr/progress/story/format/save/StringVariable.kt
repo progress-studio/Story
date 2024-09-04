@@ -15,6 +15,15 @@ data class StringVariable(
                 value = (node.body as XMLBody.Value).body
             )
         }
+
+        fun new(
+            from: kr.progress.story.format.project.StringVariable,
+        ): StringVariable {
+            return StringVariable(
+                id = from.id,
+                value = from.default.orEmpty()
+            )
+        }
     }
 
     override fun toXMLNode(): XMLNode {

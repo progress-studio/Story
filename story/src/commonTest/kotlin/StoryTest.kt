@@ -1,4 +1,5 @@
 import kr.progress.story.format.persona.Persona
+import kr.progress.story.format.project.Project
 import kr.progress.story.parser.toXMLNode
 import kr.progress.story.parser.toXMLString
 import kr.progress.story.format.save.Save
@@ -94,7 +95,7 @@ class StoryTest {
                 </stories>
             </project>
         """.trimIndent()
-        val output = kr.progress.story.format.project.Project(testData.toXMLNode()).toXMLNode().toXMLString()
+        val output = Project(testData.toXMLNode()).toXMLNode().toXMLString()
         assertEquals(testData, output)
     }
 

@@ -15,6 +15,15 @@ data class IntVariable(
                 value = (node.body as XMLBody.Value).body.toInt()
             )
         }
+
+        fun new(
+            from: kr.progress.story.format.project.IntVariable
+        ): IntVariable {
+            return IntVariable(
+                id = from.id,
+                value = from.default ?: 0
+            )
+        }
     }
 
     override fun toXMLNode(): XMLNode {

@@ -15,6 +15,15 @@ data class BooleanVariable(
                 value = (node.body as XMLBody.Value).body.toBoolean()
             )
         }
+
+        fun new(
+            from: kr.progress.story.format.project.BooleanVariable
+        ): BooleanVariable {
+            return BooleanVariable(
+                id = from.id,
+                value = from.default ?: false
+            )
+        }
     }
 
     override fun toXMLNode(): XMLNode {
