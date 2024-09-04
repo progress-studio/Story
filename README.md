@@ -12,6 +12,6 @@ repositories {
 }
 
 dependencies {
-    implementation("kr.progress.story:story:0.0.1")
+    implementation("kr.progress.story:story:0.0.2")
 }
 ```
