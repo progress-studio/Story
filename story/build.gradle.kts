@@ -15,7 +15,7 @@ mavenPublishing {
     coordinates(
         groupId = "kr.progress.story",
         artifactId = "story",
-        version = "0.0.3"
+        version = "0.0.4"
     )
     configure(
         KotlinMultiplatform(
@@ -74,6 +74,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-common"))
+                implementation(libs.kotlinx.datetime)
             }
         }
         val commonTest by getting {

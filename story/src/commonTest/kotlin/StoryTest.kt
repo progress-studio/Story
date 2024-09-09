@@ -110,7 +110,7 @@ class StoryTest {
                     </character>
                 </characters>
                 <stories>
-                    <story id="1" src="story1.xml"/>
+                    <story id="1" name="story1" src="story1.xml"/>
                 </stories>
             </project>
         """.trimIndent()
@@ -124,6 +124,13 @@ class StoryTest {
             <?xml version="1.0" encoding="UTF-8"?>
             <save>
                 <story id="1"/>
+                <date>
+                    <year>2024</year>
+                    <month>12</month>
+                    <day>10</day>
+                    <hour>10</hour>
+                    <minute>10</minute>
+                </date>
                 <variables>
                     <string id="name">steve</string>
                 </variables>
@@ -145,7 +152,7 @@ class StoryTest {
     fun storyTest() {
         val testData = """
             <?xml version="1.0" encoding="UTF-8"?>
-            <story id="1" name="Story 1">
+            <story>
                 <background id="school">
                     <audio id="ost">
                         <character id="john_doe" show="true">

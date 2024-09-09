@@ -1,10 +1,12 @@
 package kr.progress.story.format.save
 
+import kotlinx.datetime.*
 import kr.progress.story.format.project.Project
 import kr.progress.story.parser.*
 
 data class Save(
     val story: Story,
+    val date: LocalDateTime,
     val variables: List<Variable>,
     val characters: List<Character>
 ) : XMLEncodable {
@@ -17,16 +19,32 @@ data class Save(
                         .body
                         .first { it.tag == "story" }
                 ),
+                date = run {
+                    val date = node.body.body.first { it.tag == "date" }
+                    val dateChildren = (date.body as XMLBody.Children)
+                        .body
+                        .groupBy { it.tag }
+                        .mapValues { it.value.firstOrNull() }
+                        .mapValues { (it.value?.body as XMLBody.Value).body.toInt() }
+                    LocalDateTime(
+                        year = dateChildren["year"]!!,
+                        monthNumber = dateChildren["month"]!!,
+                        dayOfMonth = dateChildren["day"]!!,
+                        hour = dateChildren["hour"]!!,
+                        minute = dateChildren["minute"]!!
+                    )
+                },
                 variables = children.getValue("variables") { Variable(it) },
                 characters = children.getValue("characters") { Character(it) }
             )
         }
 
-        fun new(project: Project): Save {
+        fun new(project: Project, date: LocalDateTime? = null): Save {
             return Save(
                 story = Story(
                     id = project.stories.first().id
                 ),
+                date = date ?: Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
                 variables = project.variables
                     .filterIsInstance<kr.progress.story.format.project.Variable>()
                     .map {
@@ -56,6 +74,33 @@ data class Save(
             body = XMLBody.Children(
                 listOf(
                     story.toXMLNode(),
+                    XMLNode(
+                        tag = "date",
+                        body = XMLBody.Children(
+                            listOf(
+                                XMLNode(
+                                    tag = "year",
+                                    body = XMLBody.Value(date.year.toString())
+                                ),
+                                XMLNode(
+                                    tag = "month",
+                                    body = XMLBody.Value(date.monthNumber.toString())
+                                ),
+                                XMLNode(
+                                    tag = "day",
+                                    body = XMLBody.Value(date.dayOfMonth.toString())
+                                ),
+                                XMLNode(
+                                    tag = "hour",
+                                    body = XMLBody.Value(date.hour.toString())
+                                ),
+                                XMLNode(
+                                    tag = "minute",
+                                    body = XMLBody.Value(date.minute.toString())
+                                )
+                            )
+                        )
+                    ),
                     XMLNode(
                         tag = "variables",
                         body = XMLBody.Children(
