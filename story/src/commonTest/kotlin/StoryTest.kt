@@ -13,16 +13,32 @@ class StoryTest {
         val testData = """
             <?xml version="1.0" encoding="UTF-8"?>
             <persona>
-                <character id="john_doe">
-                    <informations>
-                        <info name="from">Sunnyvale</info>
-                    </informations>
-                </character>
-                <character id="jane_doe">
-                    <informations>
-                        <info name="from">Santa Clara</info>
-                    </informations>
-                </character>
+                <variables>
+                    <string id="name">
+                        <informations>
+                            <info name="a">b</info>
+                        </informations>
+                    </string>
+                    <character>
+                        <int id="favorable">
+                            <informations>
+                                <info name="a">b</info>
+                            </informations>
+                        </int>
+                    </character>
+                </variables>
+                <characters>
+                    <character id="john_doe">
+                        <informations>
+                            <info name="from">Sunnyvale</info>
+                        </informations>
+                    </character>
+                    <character id="jane_doe">
+                        <informations>
+                            <info name="from">Santa Clara</info>
+                        </informations>
+                    </character>
+                </characters>
             </persona>
         """.trimIndent()
         val output = Persona(testData.toXMLNode()).toXMLNode().toXMLString()
@@ -36,6 +52,9 @@ class StoryTest {
             <project name="Lorem Ipsum Dolor">
                 <variables>
                     <string id="name" name="Name"/>
+                    <character>
+                        <boolean id="friend" name="Friend" default="false"/>
+                    </character>
                 </variables>
                 <backgrounds>
                     <image id="school" name="School" src="school.png"/>

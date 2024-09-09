@@ -1,18 +1,18 @@
 package kr.progress.story.format.persona
 
-import kr.progress.story.parser.XMLBody
-import kr.progress.story.parser.XMLDecodable
-import kr.progress.story.parser.XMLEncodable
-import kr.progress.story.parser.XMLNode
+import kr.progress.story.parser.*
+import kr.progress.story.parser.getValue
 
 data class Persona(
+    val variables: List<GlobalVariable>,
     val characters: List<Character>
 ) : XMLEncodable {
     companion object : XMLDecodable<Persona> {
         override operator fun invoke(node: XMLNode): Persona {
-            val body = node.body as XMLBody.Children
+            val children = node.childrenToMap()
             return Persona(
-                characters = body.body.map { Character(it) }
+                variables = children.getValue("variables") { GlobalVariable(it) },
+                characters = children.getValue("characters") { Character(it) }
             )
         }
     }
@@ -21,7 +21,20 @@ data class Persona(
         return XMLNode(
             tag = "persona",
             body = XMLBody.Children(
-                characters.map { it.toXMLNode() }
+                listOf(
+                    XMLNode(
+                        tag = "variables",
+                        body = XMLBody.Children(
+                            variables.map { it.toXMLNode() }
+                        )
+                    ),
+                    XMLNode(
+                        tag = "characters",
+                        body = XMLBody.Children(
+                            characters.map { it.toXMLNode() }
+                        )
+                    )
+                )
             )
         )
     }

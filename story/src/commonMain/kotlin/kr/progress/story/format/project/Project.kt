@@ -4,7 +4,7 @@ import kr.progress.story.parser.*
 
 data class Project(
     val name: String,
-    val variables: List<Variable>,
+    val variables: List<GlobalVariable>,
     val backgrounds: List<Resource>,
     val sounds: List<Resource>,
     val scenes: List<Scene>,
@@ -16,7 +16,7 @@ data class Project(
             val children = node.childrenToMap()
             return Project(
                 name = node.attributes["name"]!!,
-                variables = children.getValue("variables") { Variable(it) },
+                variables = children.getValue("variables") { GlobalVariable(it) },
                 backgrounds = children.getValue("backgrounds") { Resource(it) },
                 sounds = children.getValue("sounds") { Resource(it) },
                 scenes = children.getValue("scenes") { Scene(it) },

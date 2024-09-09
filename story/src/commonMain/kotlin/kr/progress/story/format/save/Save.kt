@@ -27,13 +27,21 @@ data class Save(
                 story = Story(
                     id = project.stories.first().id
                 ),
-                variables = project.variables.map {
-                    Variable.new(it)
-                },
+                variables = project.variables
+                    .filterIsInstance<kr.progress.story.format.project.Variable>()
+                    .map {
+                        Variable.new(it)
+                    },
                 characters = project.characters.map { character ->
                     Character(
                         id = character.id,
-                        variables = character.variable.map {
+                        variables = project.variables
+                            .filterIsInstance<kr.progress.story.format.project.CharacterVariable>()
+                            .flatMap { value ->
+                                value.variables.map {
+                                    Variable.new(it)
+                                }
+                            } + character.variable.map {
                             Variable.new(it)
                         }
                     )
