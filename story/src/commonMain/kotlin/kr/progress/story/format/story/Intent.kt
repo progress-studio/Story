@@ -13,6 +13,7 @@ sealed class Intent : XMLEncodable {
                 "character" -> Character(node)
                 "delay" -> Delay(node)
                 "dialog" -> Dialog(node)
+                "monolog" -> Monolog(node)
                 "execute" -> Execute(node)
                 "background" -> Background(node)
                 "scene" -> Scene(node)

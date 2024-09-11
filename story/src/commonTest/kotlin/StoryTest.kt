@@ -155,6 +155,8 @@ class StoryTest {
             <story>
                 <background id="school">
                     <audio id="ost">
+                        <monolog>Hi</monolog>
+                        <dialog name="name">Hi</dialog>
                         <character id="john_doe" show="true">
                             <overlay id="hi"/>
                             <dialog>
