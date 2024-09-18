@@ -124,6 +124,10 @@ class StoryTest {
             <?xml version="1.0" encoding="UTF-8"?>
             <save>
                 <story id="1"/>
+                <cleared>
+                    <story id="1"/>
+                    <story id="2"/>
+                </cleared>
                 <date>
                     <year>2024</year>
                     <month>12</month>

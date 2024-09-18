@@ -9,7 +9,7 @@ data class Project(
     val sounds: List<Resource>,
     val scenes: List<Scene>,
     val characters: List<Character>,
-    val stories: List<Story>
+    val stories: List<Resource>
 ) : XMLEncodable {
     companion object : XMLDecodable<Project> {
         override operator fun invoke(node: XMLNode): Project {
@@ -21,7 +21,7 @@ data class Project(
                 sounds = children.getValue("sounds") { Resource(it) },
                 scenes = children.getValue("scenes") { Scene(it) },
                 characters = children.getValue("characters") { Character(it) },
-                stories = children.getValue("stories") { Story(it) }
+                stories = children.getValue("stories") { Resource(it) }
             )
         }
     }

@@ -5,7 +5,8 @@ import kr.progress.story.format.project.Project
 import kr.progress.story.parser.*
 
 data class Save(
-    val story: Story,
+    val target: Target?,
+    val cleared: List<Story>,
     val date: LocalDateTime,
     val variables: List<Variable>,
     val characters: List<Character>
@@ -14,11 +15,15 @@ data class Save(
         override operator fun invoke(node: XMLNode): Save {
             val children = node.childrenToMap()
             return Save(
-                story = Story(
-                    (node.body as XMLBody.Children)
-                        .body
-                        .first { it.tag == "story" }
-                ),
+                target = (node.body as XMLBody.Children)
+                    .body
+                    .firstOrNull { it.tag == "story" }?.let {
+                        Story(it)
+                    } ?: node.body.body
+                    .firstOrNull { it.tag == "location" }?.let {
+                        Location(it)
+                    },
+                cleared = children.getValue("cleared") { Story(it) },
                 date = run {
                     val date = node.body.body.first { it.tag == "date" }
                     val dateChildren = (date.body as XMLBody.Children)
@@ -41,9 +46,8 @@ data class Save(
 
         fun new(project: Project, date: LocalDateTime? = null): Save {
             return Save(
-                story = Story(
-                    id = project.stories.first().id
-                ),
+                target = null,
+                cleared = emptyList(),
                 date = date ?: Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
                 variables = project.variables
                     .filterIsInstance<kr.progress.story.format.project.Variable>()
@@ -72,8 +76,20 @@ data class Save(
         return XMLNode(
             tag = "save",
             body = XMLBody.Children(
-                listOf(
-                    story.toXMLNode(),
+                listOfNotNull(
+                    target?.toXMLNode(),
+                    cleared.takeIf {
+                        it.isNotEmpty()
+                    }?.let {
+                        XMLNode(
+                            tag = "cleared",
+                            body = XMLBody.Children(
+                                cleared.map {
+                                    it.toXMLNode()
+                                }
+                            )
+                        )
+                    },
                     XMLNode(
                         tag = "date",
                         body = XMLBody.Children(
