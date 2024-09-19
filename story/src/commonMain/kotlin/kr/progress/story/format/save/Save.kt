@@ -57,7 +57,7 @@ data class Save(
                 characters = project.characters.map { character ->
                     Character(
                         id = character.id,
-                        variables = project.variables
+                        variable = project.variables
                             .filterIsInstance<kr.progress.story.format.project.CharacterVariable>()
                             .flatMap { value ->
                                 value.variables.map {
@@ -65,7 +65,8 @@ data class Save(
                                 }
                             } + character.variable.map {
                             Variable.new(it)
-                        }
+                        },
+                        chat = emptyList()
                     )
                 }
             )
@@ -78,15 +79,11 @@ data class Save(
             body = XMLBody.Children(
                 listOfNotNull(
                     target?.toXMLNode(),
-                    cleared.takeIf {
-                        it.isNotEmpty()
-                    }?.let {
+                    cleared.takeIf { it.isNotEmpty() }?.let {
                         XMLNode(
                             tag = "cleared",
                             body = XMLBody.Children(
-                                cleared.map {
-                                    it.toXMLNode()
-                                }
+                                cleared.map { it.toXMLNode() }
                             )
                         )
                     },

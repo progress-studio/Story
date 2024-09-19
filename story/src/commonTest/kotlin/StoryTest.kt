@@ -140,10 +140,18 @@ class StoryTest {
                 </variables>
                 <characters>
                     <character id="john_doe">
-                        <int id="favorable">1</int>
+                        <variable>
+                            <int id="favorable">1</int>
+                        </variable>
+                        <chat>
+                            <sent>안녕</sent>
+                            <received>반가워</received>
+                        </chat>
                     </character>
                     <character id="jane_doe">
-                        <int id="favorable">2</int>
+                        <variable>
+                            <int id="favorable">2</int>
+                        </variable>
                     </character>
                 </characters>
             </save>

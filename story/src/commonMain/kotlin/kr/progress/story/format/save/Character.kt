@@ -4,14 +4,16 @@ import kr.progress.story.parser.*
 
 data class Character(
     override val id: String,
-    val variables: List<Variable>
+    val variable: List<Variable>,
+    val chat: List<Chat>
 ) : XMLEncodable, Identifiable {
     companion object : XMLDecodable<Character> {
         override operator fun invoke(node: XMLNode): Character {
-            val body = node.body as XMLBody.Children
+            val children = node.childrenToMap()
             return Character(
                 id = node.attributes["id"]!!,
-                variables = body.body.map { Variable(it) }
+                variable = children.getValue("variable") { Variable(it) },
+                chat = children.getValue("chat") { Chat(it) }
             )
         }
     }
@@ -21,7 +23,24 @@ data class Character(
             tag = "character",
             attributes = mapOf("id" to id),
             body = XMLBody.Children(
-                variables.map { it.toXMLNode() }
+                listOfNotNull(
+                    variable.takeIf { it.isNotEmpty() }?.let {
+                        XMLNode(
+                            tag = "variable",
+                            body = XMLBody.Children(
+                                variable.map { it.toXMLNode() }
+                            )
+                        )
+                    },
+                    chat.takeIf { it.isNotEmpty() }?.let {
+                        XMLNode(
+                            tag = "chat",
+                            body = XMLBody.Children(
+                                chat.map { it.toXMLNode() }
+                            )
+                        )
+                    }
+                )
             )
         )
     }
