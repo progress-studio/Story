@@ -18,30 +18,28 @@ data class Character(
         }
     }
 
-    override fun toXMLNode(): XMLNode {
-        return XMLNode(
-            tag = "character",
-            attributes = mapOf("id" to id),
-            body = XMLBody.Children(
-                listOfNotNull(
-                    variable.takeIf { it.isNotEmpty() }?.let {
-                        XMLNode(
-                            tag = "variable",
-                            body = XMLBody.Children(
-                                variable.map { it.toXMLNode() }
-                            )
+    override fun toXMLNode() = XMLNode(
+        tag = "character",
+        attributes = mapOf("id" to id),
+        body = XMLBody.Children(
+            listOfNotNull(
+                variable.takeIf { it.isNotEmpty() }?.let {
+                    XMLNode(
+                        tag = "variable",
+                        body = XMLBody.Children(
+                            variable.map { it.toXMLNode() }
                         )
-                    },
-                    chat.takeIf { it.isNotEmpty() }?.let {
-                        XMLNode(
-                            tag = "chat",
-                            body = XMLBody.Children(
-                                chat.map { it.toXMLNode() }
-                            )
+                    )
+                },
+                chat.takeIf { it.isNotEmpty() }?.let {
+                    XMLNode(
+                        tag = "chat",
+                        body = XMLBody.Children(
+                            chat.map { it.toXMLNode() }
                         )
-                    }
-                )
+                    )
+                }
             )
         )
-    }
+    )
 }

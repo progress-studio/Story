@@ -7,15 +7,13 @@ data class Delay(
     val duration: Long
 ) : Intent() {
     companion object : XMLDecodable<Delay> {
-        override fun invoke(node: XMLNode): Delay {
-            return Delay(duration = node.attributes["duration"]!!.toLong())
-        }
-    }
-
-    override fun toXMLNode(): XMLNode {
-        return XMLNode(
-            tag = "delay",
-            attributes = mapOf("duration" to duration.toString())
+        override fun invoke(node: XMLNode) = Delay(
+            duration = node.attributes["duration"]!!.toLong()
         )
     }
+
+    override fun toXMLNode() = XMLNode(
+        tag = "delay",
+        attributes = mapOf("duration" to duration.toString())
+    )
 }

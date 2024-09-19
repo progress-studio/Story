@@ -9,22 +9,17 @@ data class Background(
     val body: List<Intent>
 ) : Intent() {
     companion object : XMLDecodable<Background> {
-        override fun invoke(node: XMLNode): Background {
-            val body = node.body as XMLBody.Children
-            return Background(
-                id = node.attributes["id"]!!,
-                body = body.body.map { Intent(it) }
-            )
-        }
-    }
-
-    override fun toXMLNode(): XMLNode {
-        return XMLNode(
-            tag = "background",
-            attributes = mapOf("id" to id),
-            body = XMLBody.Children(
-                body.map { it.toXMLNode() }
-            )
+        override fun invoke(node: XMLNode) = Background(
+            id = node.attributes["id"]!!,
+            body = (node.body as XMLBody.Children).body.map { Intent(it) }
         )
     }
+
+    override fun toXMLNode() = XMLNode(
+        tag = "background",
+        attributes = mapOf("id" to id),
+        body = XMLBody.Children(
+            body.map { it.toXMLNode() }
+        )
+    )
 }

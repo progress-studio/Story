@@ -9,28 +9,22 @@ data class BooleanVariable(
     val value: Boolean
 ) : Variable() {
     companion object : XMLDecodable<BooleanVariable> {
-        override operator fun invoke(node: XMLNode): BooleanVariable {
-            return BooleanVariable(
-                id = node.attributes["id"]!!,
-                value = (node.body as XMLBody.Value).body.toBoolean()
-            )
-        }
+        override operator fun invoke(node: XMLNode) = BooleanVariable(
+            id = node.attributes["id"]!!,
+            value = (node.body as XMLBody.Value).body.toBoolean()
+        )
 
         fun new(
             from: kr.progress.story.format.project.BooleanVariable
-        ): BooleanVariable {
-            return BooleanVariable(
-                id = from.id,
-                value = from.default ?: false
-            )
-        }
-    }
-
-    override fun toXMLNode(): XMLNode {
-        return XMLNode(
-            tag = "boolean",
-            attributes = mapOf("id" to id),
-            body = XMLBody.Value(value.toString())
+        ) = BooleanVariable(
+            id = from.id,
+            value = from.default ?: false
         )
     }
+
+    override fun toXMLNode() = XMLNode(
+        tag = "boolean",
+        attributes = mapOf("id" to id),
+        body = XMLBody.Value(value.toString())
+    )
 }

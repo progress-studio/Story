@@ -7,15 +7,13 @@ data class Base(
     val id: String
 ) : Intent() {
     companion object : XMLDecodable<Base> {
-        override fun invoke(node: XMLNode): Base {
-            return Base(id = node.attributes["id"]!!)
-        }
-    }
-
-    override fun toXMLNode(): XMLNode {
-        return XMLNode(
-            tag = "base",
-            attributes = mapOf("id" to id)
+        override fun invoke(node: XMLNode) = Base(
+            id = node.attributes["id"]!!
         )
     }
+
+    override fun toXMLNode() = XMLNode(
+        tag = "base",
+        attributes = mapOf("id" to id)
+    )
 }

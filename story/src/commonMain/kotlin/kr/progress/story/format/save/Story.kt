@@ -8,17 +8,13 @@ data class Story(
     override val id: String
 ) : Target(), Identifiable {
     companion object : XMLDecodable<Story> {
-        override operator fun invoke(node: XMLNode): Story {
-            return Story(
-                id = node.attributes["id"]!!
-            )
-        }
-    }
-
-    override fun toXMLNode(): XMLNode {
-        return XMLNode(
-            tag = "story",
-            attributes = mapOf("id" to id)
+        override operator fun invoke(node: XMLNode) = Story(
+            id = node.attributes["id"]!!
         )
     }
+
+    override fun toXMLNode() = XMLNode(
+        tag = "story",
+        attributes = mapOf("id" to id)
+    )
 }

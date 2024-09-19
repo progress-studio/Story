@@ -7,26 +7,26 @@ import kr.progress.story.parser.Identifiable
 
 sealed class Variable : XMLEncodable, Identifiable {
     companion object : XMLDecodable<Variable> {
-        override fun invoke(node: XMLNode): Variable {
-            return when (node.tag) {
+        override fun invoke(node: XMLNode): Variable =
+            when (node.tag) {
                 "int" -> IntVariable(node)
                 "boolean" -> BooleanVariable(node)
                 "string" -> StringVariable(node)
                 else -> throw IllegalStateException()
             }
-        }
 
         fun new(
             from: kr.progress.story.format.project.Variable
-        ): Variable {
-            return when (from) {
+        ): Variable =
+            when (from) {
                 is kr.progress.story.format.project.IntVariable ->
                     IntVariable.new(from)
+
                 is kr.progress.story.format.project.BooleanVariable ->
                     BooleanVariable.new(from)
+
                 is kr.progress.story.format.project.StringVariable ->
                     StringVariable.new(from)
             }
-        }
     }
 }

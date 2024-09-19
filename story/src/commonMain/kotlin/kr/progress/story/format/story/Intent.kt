@@ -6,8 +6,8 @@ import kr.progress.story.parser.XMLNode
 
 sealed class Intent : XMLEncodable {
     companion object : XMLDecodable<Intent> {
-        override operator fun invoke(node: XMLNode): Intent {
-            return when (node.tag) {
+        override operator fun invoke(node: XMLNode): Intent =
+            when (node.tag) {
                 "audio" -> Audio(node)
                 "base" -> Base(node)
                 "character" -> Character(node)
@@ -21,6 +21,5 @@ sealed class Intent : XMLEncodable {
                 "int", "boolean", "string" -> Variable(node)
                 else -> throw IllegalStateException()
             }
-        }
     }
 }

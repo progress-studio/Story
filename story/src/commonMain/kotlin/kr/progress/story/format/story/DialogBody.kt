@@ -27,15 +27,13 @@ sealed class DialogBody {
                 }
             }
 
-            override fun toXMLNode(): XMLNode {
-                return XMLNode(
-                    tag = "choice",
-                    attributes = mapOf("body" to text),
-                    body = XMLBody.Children(
-                        body.map { it.toXMLNode() }
-                    )
+            override fun toXMLNode() = XMLNode(
+                tag = "choice",
+                attributes = mapOf("body" to text),
+                body = XMLBody.Children(
+                    body.map { it.toXMLNode() }
                 )
-            }
+            )
         }
     }
 }

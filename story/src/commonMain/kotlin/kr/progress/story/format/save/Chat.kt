@@ -16,22 +16,18 @@ data class Chat(
     }
 
     companion object : XMLDecodable<Chat> {
-        override operator fun invoke(node: XMLNode): Chat {
-            return Chat(
-                sentBy = Type.entries.find { it.tag == node.tag }!!,
-                method = node.attributes["method"],
-                body = (node.body as XMLBody.Value).body
-            )
-        }
-    }
-
-    override fun toXMLNode(): XMLNode {
-        return XMLNode(
-            tag = sentBy.tag,
-            attributes = method?.let {
-                mapOf("method" to it)
-            } ?: emptyMap(),
-            body = XMLBody.Value(body)
+        override operator fun invoke(node: XMLNode) = Chat(
+            sentBy = Type.entries.find { it.tag == node.tag }!!,
+            method = node.attributes["method"],
+            body = (node.body as XMLBody.Value).body
         )
     }
+
+    override fun toXMLNode() = XMLNode(
+        tag = sentBy.tag,
+        attributes = method?.let {
+            mapOf("method" to it)
+        } ?: emptyMap(),
+        body = XMLBody.Value(body)
+    )
 }

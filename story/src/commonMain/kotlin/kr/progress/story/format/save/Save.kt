@@ -53,94 +53,90 @@ data class Save(
             id: String = Uuid.random().toString(),
             project: Project,
             date: LocalDateTime = getCurrentDateTime()
-        ): Save {
-            return Save(
-                id = id,
-                target = null,
-                cleared = emptyList(),
-                date = date,
-                variables = project.variables
-                    .filterIsInstance<kr.progress.story.format.project.Variable>()
-                    .map {
+        ) = Save(
+            id = id,
+            target = null,
+            cleared = emptyList(),
+            date = date,
+            variables = project.variables
+                .filterIsInstance<kr.progress.story.format.project.Variable>()
+                .map {
+                    Variable.new(it)
+                },
+            characters = project.characters.map { character ->
+                Character(
+                    id = character.id,
+                    variable = project.variables
+                        .filterIsInstance<kr.progress.story.format.project.CharacterVariable>()
+                        .flatMap { value ->
+                            value.variables.map {
+                                Variable.new(it)
+                            }
+                        } + character.variable.map {
                         Variable.new(it)
                     },
-                characters = project.characters.map { character ->
-                    Character(
-                        id = character.id,
-                        variable = project.variables
-                            .filterIsInstance<kr.progress.story.format.project.CharacterVariable>()
-                            .flatMap { value ->
-                                value.variables.map {
-                                    Variable.new(it)
-                                }
-                            } + character.variable.map {
-                            Variable.new(it)
-                        },
-                        chat = emptyList()
-                    )
-                }
-            )
-        }
+                    chat = emptyList()
+                )
+            }
+        )
     }
 
-    fun updateDate(to: LocalDateTime = getCurrentDateTime()): Save = copy(date = to)
+    fun updateDate(to: LocalDateTime = getCurrentDateTime()) = copy(date = to)
 
-    override fun toXMLNode(): XMLNode {
-        return XMLNode(
-            tag = "save",
-            attributes = mapOf("id" to id),
-            body = XMLBody.Children(
-                listOfNotNull(
-                    target?.toXMLNode(),
-                    cleared.takeIf { it.isNotEmpty() }?.let {
-                        XMLNode(
-                            tag = "cleared",
-                            body = XMLBody.Children(
-                                cleared.map { it.toXMLNode() }
+    override fun toXMLNode() = XMLNode(
+        tag = "save",
+        attributes = mapOf("id" to id),
+        body = XMLBody.Children(
+            listOfNotNull(
+                target?.toXMLNode(),
+                cleared.takeIf { it.isNotEmpty() }?.let {
+                    XMLNode(
+                        tag = "cleared",
+                        body = XMLBody.Children(
+                            cleared.map { it.toXMLNode() }
+                        )
+                    )
+                },
+                XMLNode(
+                    tag = "date",
+                    body = XMLBody.Children(
+                        listOf(
+                            XMLNode(
+                                tag = "year",
+                                body = XMLBody.Value(date.year.toString())
+                            ),
+                            XMLNode(
+                                tag = "month",
+                                body = XMLBody.Value(date.monthNumber.toString())
+                            ),
+                            XMLNode(
+                                tag = "day",
+                                body = XMLBody.Value(date.dayOfMonth.toString())
+                            ),
+                            XMLNode(
+                                tag = "hour",
+                                body = XMLBody.Value(date.hour.toString())
+                            ),
+                            XMLNode(
+                                tag = "minute",
+                                body = XMLBody.Value(date.minute.toString())
                             )
                         )
-                    },
-                    XMLNode(
-                        tag = "date",
-                        body = XMLBody.Children(
-                            listOf(
-                                XMLNode(
-                                    tag = "year",
-                                    body = XMLBody.Value(date.year.toString())
-                                ),
-                                XMLNode(
-                                    tag = "month",
-                                    body = XMLBody.Value(date.monthNumber.toString())
-                                ),
-                                XMLNode(
-                                    tag = "day",
-                                    body = XMLBody.Value(date.dayOfMonth.toString())
-                                ),
-                                XMLNode(
-                                    tag = "hour",
-                                    body = XMLBody.Value(date.hour.toString())
-                                ),
-                                XMLNode(
-                                    tag = "minute",
-                                    body = XMLBody.Value(date.minute.toString())
-                                )
-                            )
-                        )
-                    ),
-                    XMLNode(
-                        tag = "variables",
-                        body = XMLBody.Children(
-                            variables.map { it.toXMLNode() }
-                        )
-                    ),
-                    XMLNode(
-                        tag = "characters",
-                        body = XMLBody.Children(
-                            characters.map { it.toXMLNode() }
-                        )
+                    )
+                ),
+                XMLNode(
+                    tag = "variables",
+                    body = XMLBody.Children(
+                        variables.map { it.toXMLNode() }
+                    )
+                ),
+                XMLNode(
+                    tag = "characters",
+                    body = XMLBody.Children(
+                        characters.map { it.toXMLNode() }
                     )
                 )
             )
         )
-    }
+    )
 }

@@ -7,17 +7,13 @@ data class Location(
     val name: String
 ) : Target() {
     companion object : XMLDecodable<Location> {
-        override operator fun invoke(node: XMLNode): Location {
-            return Location(
-                name = node.attributes["name"]!!
-            )
-        }
-    }
-
-    override fun toXMLNode(): XMLNode {
-        return XMLNode(
-            tag = "location",
-            attributes = mapOf("name" to name)
+        override operator fun invoke(node: XMLNode) = Location(
+            name = node.attributes["name"]!!
         )
     }
+
+    override fun toXMLNode() = XMLNode(
+        tag = "location",
+        attributes = mapOf("name" to name)
+    )
 }

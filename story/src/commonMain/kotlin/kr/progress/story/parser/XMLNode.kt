@@ -5,13 +5,11 @@ data class XMLNode(
     val attributes: Map<String, String> = mapOf(),
     val body: XMLBody? = null
 ) {
-    fun childrenToMap(): Map<String, List<XMLBody>> {
-        return (body as XMLBody.Children)
-            .body
-            .groupBy { it.tag }
-            .mapValues {
-                it.value
-                    .mapNotNull { value -> value.body }
-            }
-    }
+    fun childrenToMap() = (body as XMLBody.Children)
+        .body
+        .groupBy { it.tag }
+        .mapValues {
+            it.value
+                .mapNotNull { value -> value.body }
+        }
 }

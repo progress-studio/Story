@@ -8,17 +8,13 @@ data class Monolog(
     val body: String
 ) : Intent() {
     companion object : XMLDecodable<Monolog> {
-        override operator fun invoke(node: XMLNode): Monolog {
-            return Monolog(
-                body = (node.body as XMLBody.Value).body
-            )
-        }
-    }
-
-    override fun toXMLNode(): XMLNode {
-        return XMLNode(
-            tag = "monolog",
-            body = XMLBody.Value(body)
+        override operator fun invoke(node: XMLNode) = Monolog(
+            body = (node.body as XMLBody.Value).body
         )
     }
+
+    override fun toXMLNode() = XMLNode(
+        tag = "monolog",
+        body = XMLBody.Value(body)
+    )
 }

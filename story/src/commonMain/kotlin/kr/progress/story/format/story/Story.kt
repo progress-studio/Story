@@ -17,12 +17,10 @@ data class Story(
         }
     }
 
-    override fun toXMLNode(): XMLNode {
-        return XMLNode(
-            tag = "story",
-            body = XMLBody.Children(
-                body.map { it.toXMLNode() }
-            )
+    override fun toXMLNode() = XMLNode(
+        tag = "story",
+        body = XMLBody.Children(
+            body.map { it.toXMLNode() }
         )
-    }
+    )
 }

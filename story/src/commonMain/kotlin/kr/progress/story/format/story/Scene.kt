@@ -22,16 +22,14 @@ data class Scene(
         }
     }
 
-    override fun toXMLNode(): XMLNode {
-        return XMLNode(
-            tag = "scene",
-            attributes = mapOf("id" to id).toMutableMap().also { map ->
-                base?.let { map["base"] = it }
-                overlay?.let { map["overlay"] = it }
-            },
-            body = XMLBody.Children(
-                body.map { it.toXMLNode() }
-            )
+    override fun toXMLNode() = XMLNode(
+        tag = "scene",
+        attributes = mapOf("id" to id).toMutableMap().also { map ->
+            base?.let { map["base"] = it }
+            overlay?.let { map["overlay"] = it }
+        },
+        body = XMLBody.Children(
+            body.map { it.toXMLNode() }
         )
-    }
+    )
 }
