@@ -6,13 +6,12 @@ import kr.progress.story.parser.XMLNode
 
 sealed class Variable : GlobalVariable(), Identifiable {
     companion object : XMLDecodable<Variable> {
-        override fun invoke(node: XMLNode): Variable {
-            return when (node.tag) {
+        override fun invoke(node: XMLNode): Variable =
+            when (node.tag) {
                 "int" -> IntVariable(node)
                 "boolean" -> BooleanVariable(node)
                 "string" -> StringVariable(node)
                 else -> throw IllegalStateException()
             }
-        }
     }
 }

@@ -10,23 +10,19 @@ data class Info(
     val value: String
 ) : XMLEncodable {
     companion object : XMLDecodable<Info> {
-        override fun invoke(node: XMLNode): Info {
-            return Info(
-                name = node.attributes["name"]!!,
-                value = (node.body as XMLBody.Value).body
-            )
-        }
-    }
-
-    override fun toXMLNode(): XMLNode {
-        return XMLNode(
-            tag = "info",
-            attributes = mapOf(
-                "name" to name
-            ),
-            body = XMLBody.Value(
-                body = value
-            ),
+        override fun invoke(node: XMLNode) = Info(
+            name = node.attributes["name"]!!,
+            value = (node.body as XMLBody.Value).body
         )
     }
+
+    override fun toXMLNode() = XMLNode(
+        tag = "info",
+        attributes = mapOf(
+            "name" to name
+        ),
+        body = XMLBody.Value(
+            body = value
+        ),
+    )
 }

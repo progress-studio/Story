@@ -9,26 +9,22 @@ data class BooleanVariable(
     val default: Boolean?
 ) : Variable() {
     companion object : XMLDecodable<BooleanVariable> {
-        override operator fun invoke(node: XMLNode): BooleanVariable {
-            return BooleanVariable(
-                id = node.attributes["id"]!!,
-                name = node.attributes["name"]!!,
-                default = node.attributes["default"]?.toBoolean()
-            )
-        }
-    }
-
-    override fun toXMLNode(): XMLNode {
-        return XMLNode(
-            tag = "boolean",
-            attributes = mutableMapOf(
-                "id" to id,
-                "name" to name
-            ).apply {
-                default?.toString()?.let {
-                    this["default"] = it
-                }
-            }
+        override operator fun invoke(node: XMLNode) = BooleanVariable(
+            id = node.attributes["id"]!!,
+            name = node.attributes["name"]!!,
+            default = node.attributes["default"]?.toBoolean()
         )
     }
+
+    override fun toXMLNode() = XMLNode(
+        tag = "boolean",
+        attributes = mutableMapOf(
+            "id" to id,
+            "name" to name
+        ).apply {
+            default?.toString()?.let {
+                this["default"] = it
+            }
+        }
+    )
 }

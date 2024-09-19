@@ -3,8 +3,11 @@ package kr.progress.story.format.save
 import kotlinx.datetime.*
 import kr.progress.story.format.project.Project
 import kr.progress.story.parser.*
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 data class Save(
+    val id: String,
     val target: Target?,
     val cleared: List<Story>,
     val date: LocalDateTime,
@@ -15,6 +18,7 @@ data class Save(
         override operator fun invoke(node: XMLNode): Save {
             val children = node.childrenToMap()
             return Save(
+                id = node.attributes["id"]!!,
                 target = (node.body as XMLBody.Children)
                     .body
                     .firstOrNull { it.tag == "story" }?.let {
@@ -44,11 +48,17 @@ data class Save(
             )
         }
 
-        fun new(project: Project, date: LocalDateTime? = null): Save {
+        @OptIn(ExperimentalUuidApi::class)
+        fun new(
+            id: String = Uuid.random().toString(),
+            project: Project,
+            date: LocalDateTime = getCurrentDateTime()
+        ): Save {
             return Save(
+                id = id,
                 target = null,
                 cleared = emptyList(),
-                date = date ?: Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+                date = date,
                 variables = project.variables
                     .filterIsInstance<kr.progress.story.format.project.Variable>()
                     .map {
@@ -73,9 +83,12 @@ data class Save(
         }
     }
 
+    fun updateDate(to: LocalDateTime = getCurrentDateTime()): Save = copy(date = to)
+
     override fun toXMLNode(): XMLNode {
         return XMLNode(
             tag = "save",
+            attributes = mapOf("id" to id),
             body = XMLBody.Children(
                 listOfNotNull(
                     target?.toXMLNode(),

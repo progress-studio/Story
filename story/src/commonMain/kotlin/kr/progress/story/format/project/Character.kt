@@ -22,35 +22,33 @@ data class Character(
         }
     }
 
-    override fun toXMLNode(): XMLNode {
-        return XMLNode(
-            tag = "character",
-            attributes = mapOf(
-                "id" to id,
-                "name" to name
-            ),
-            body = XMLBody.Children(
-                listOf(
-                    XMLNode(
-                        tag = "variable",
-                        body = XMLBody.Children(
-                            variable.map { it.toXMLNode() }
-                        )
-                    ),
-                    XMLNode(
-                        tag = "base",
-                        body = XMLBody.Children(
-                            base.map { it.toXMLNode() }
-                        )
-                    ),
-                    XMLNode(
-                        tag = "overlay",
-                        body = XMLBody.Children(
-                            overlay.map { it.toXMLNode() }
-                        )
+    override fun toXMLNode() = XMLNode(
+        tag = "character",
+        attributes = mapOf(
+            "id" to id,
+            "name" to name
+        ),
+        body = XMLBody.Children(
+            listOf(
+                XMLNode(
+                    tag = "variable",
+                    body = XMLBody.Children(
+                        variable.map { it.toXMLNode() }
+                    )
+                ),
+                XMLNode(
+                    tag = "base",
+                    body = XMLBody.Children(
+                        base.map { it.toXMLNode() }
+                    )
+                ),
+                XMLNode(
+                    tag = "overlay",
+                    body = XMLBody.Children(
+                        overlay.map { it.toXMLNode() }
                     )
                 )
             )
         )
-    }
+    )
 }

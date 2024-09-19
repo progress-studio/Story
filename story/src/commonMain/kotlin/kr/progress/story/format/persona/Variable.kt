@@ -24,20 +24,18 @@ data class Variable(
         }
     }
 
-    override fun toXMLNode(): XMLNode {
-        return XMLNode(
-            tag = type.tag,
-            attributes = mapOf("id" to id),
-            body = XMLBody.Children(
-                listOf(
-                    XMLNode(
-                        tag = "informations",
-                        body = XMLBody.Children(
-                            informations.map { it.toXMLNode() }
-                        )
+    override fun toXMLNode() = XMLNode(
+        tag = type.tag,
+        attributes = mapOf("id" to id),
+        body = XMLBody.Children(
+            listOf(
+                XMLNode(
+                    tag = "informations",
+                    body = XMLBody.Children(
+                        informations.map { it.toXMLNode() }
                     )
                 )
             )
         )
-    }
+    )
 }

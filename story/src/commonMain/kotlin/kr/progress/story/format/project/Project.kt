@@ -26,50 +26,48 @@ data class Project(
         }
     }
 
-    override fun toXMLNode(): XMLNode {
-        return XMLNode(
-            tag = "project",
-            attributes = mapOf("name" to name),
-            body = XMLBody.Children(
-                listOf(
-                    XMLNode(
-                        tag = "variables",
-                        body = XMLBody.Children(
-                            variables.map { it.toXMLNode() }
-                        )
-                    ),
-                    XMLNode(
-                        tag = "backgrounds",
-                        body = XMLBody.Children(
-                            backgrounds.map { it.toXMLNode() }
-                        )
-                    ),
-                    XMLNode(
-                        tag = "sounds",
-                        body = XMLBody.Children(
-                            sounds.map { it.toXMLNode() }
-                        )
-                    ),
-                    XMLNode(
-                        tag = "scenes",
-                        body = XMLBody.Children(
-                            scenes.map { it.toXMLNode() }
-                        )
-                    ),
-                    XMLNode(
-                        tag = "characters",
-                        body = XMLBody.Children(
-                            characters.map { it.toXMLNode() }
-                        )
-                    ),
-                    XMLNode(
-                        tag = "stories",
-                        body = XMLBody.Children(
-                            stories.map { it.toXMLNode() }
-                        )
+    override fun toXMLNode() = XMLNode(
+        tag = "project",
+        attributes = mapOf("name" to name),
+        body = XMLBody.Children(
+            listOf(
+                XMLNode(
+                    tag = "variables",
+                    body = XMLBody.Children(
+                        variables.map { it.toXMLNode() }
+                    )
+                ),
+                XMLNode(
+                    tag = "backgrounds",
+                    body = XMLBody.Children(
+                        backgrounds.map { it.toXMLNode() }
+                    )
+                ),
+                XMLNode(
+                    tag = "sounds",
+                    body = XMLBody.Children(
+                        sounds.map { it.toXMLNode() }
+                    )
+                ),
+                XMLNode(
+                    tag = "scenes",
+                    body = XMLBody.Children(
+                        scenes.map { it.toXMLNode() }
+                    )
+                ),
+                XMLNode(
+                    tag = "characters",
+                    body = XMLBody.Children(
+                        characters.map { it.toXMLNode() }
+                    )
+                ),
+                XMLNode(
+                    tag = "stories",
+                    body = XMLBody.Children(
+                        stories.map { it.toXMLNode() }
                     )
                 )
             )
         )
-    }
+    )
 }

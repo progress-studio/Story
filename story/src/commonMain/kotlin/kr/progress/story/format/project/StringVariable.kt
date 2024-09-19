@@ -9,26 +9,22 @@ data class StringVariable(
     val default: String?
 ) : Variable() {
     companion object : XMLDecodable<StringVariable> {
-        override operator fun invoke(node: XMLNode): StringVariable {
-            return StringVariable(
-                id = node.attributes["id"]!!,
-                name = node.attributes["name"]!!,
-                default = node.attributes["default"]
-            )
-        }
-    }
-
-    override fun toXMLNode(): XMLNode {
-        return XMLNode(
-            tag = "string",
-            attributes = mutableMapOf(
-                "id" to id,
-                "name" to name
-            ).apply {
-                default?.let {
-                    this["default"] = it
-                }
-            }
+        override operator fun invoke(node: XMLNode) = StringVariable(
+            id = node.attributes["id"]!!,
+            name = node.attributes["name"]!!,
+            default = node.attributes["default"]
         )
     }
+
+    override fun toXMLNode() = XMLNode(
+        tag = "string",
+        attributes = mutableMapOf(
+            "id" to id,
+            "name" to name
+        ).apply {
+            default?.let {
+                this["default"] = it
+            }
+        }
+    )
 }

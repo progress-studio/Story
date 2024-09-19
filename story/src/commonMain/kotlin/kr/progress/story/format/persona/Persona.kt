@@ -17,25 +17,23 @@ data class Persona(
         }
     }
 
-    override fun toXMLNode(): XMLNode {
-        return XMLNode(
-            tag = "persona",
-            body = XMLBody.Children(
-                listOf(
-                    XMLNode(
-                        tag = "variables",
-                        body = XMLBody.Children(
-                            variables.map { it.toXMLNode() }
-                        )
-                    ),
-                    XMLNode(
-                        tag = "characters",
-                        body = XMLBody.Children(
-                            characters.map { it.toXMLNode() }
-                        )
+    override fun toXMLNode() = XMLNode(
+        tag = "persona",
+        body = XMLBody.Children(
+            listOf(
+                XMLNode(
+                    tag = "variables",
+                    body = XMLBody.Children(
+                        variables.map { it.toXMLNode() }
+                    )
+                ),
+                XMLNode(
+                    tag = "characters",
+                    body = XMLBody.Children(
+                        characters.map { it.toXMLNode() }
                     )
                 )
             )
         )
-    }
+    )
 }

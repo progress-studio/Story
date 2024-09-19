@@ -122,7 +122,7 @@ class StoryTest {
     fun saveTest() {
         val testData = """
             <?xml version="1.0" encoding="UTF-8"?>
-            <save>
+            <save id="UUID">
                 <story id="1"/>
                 <cleared>
                     <story id="1"/>
