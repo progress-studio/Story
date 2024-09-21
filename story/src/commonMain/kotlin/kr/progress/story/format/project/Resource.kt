@@ -9,15 +9,20 @@ data class Resource(
     override val id: String,
     val name: String,
     val type: String,
-    val src: String
+    val src: String,
+    override val extraAttributes: Map<String, String> = emptyMap()
 ) : XMLEncodable, Identifiable {
     companion object : XMLDecodable<Resource> {
-        override operator fun invoke(node: XMLNode) = Resource(
-            id = node.attributes["id"]!!,
-            name = node.attributes["name"]!!,
-            type = node.tag,
-            src = node.attributes["src"]!!
-        )
+        override operator fun invoke(node: XMLNode): Resource {
+            val attributes = node.attributes.toMutableMap()
+            return Resource(
+                id = attributes.remove("id")!!,
+                name = attributes.remove("name")!!,
+                type = node.tag,
+                src = attributes.remove("src")!!,
+                extraAttributes = attributes
+            )
+        }
     }
 
     override fun toXMLNode() = XMLNode(
@@ -26,6 +31,6 @@ data class Resource(
             "id" to id,
             "name" to name,
             "src" to src
-        )
+        ) + extraAttributes
     )
 }

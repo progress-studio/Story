@@ -57,7 +57,7 @@ class StoryTest {
                     </character>
                 </variables>
                 <backgrounds>
-                    <image id="school" name="School" src="school.png"/>
+                    <image id="school" name="School" src="school.png" alt="a"/>
                 </backgrounds>
                 <sounds>
                     <audio id="ost" name="OST" src="ost.mp3"/>

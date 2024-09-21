@@ -6,16 +6,20 @@ data class Scene(
     override val id: String,
     val name: String,
     val base: List<Resource>,
-    val overlay: List<Resource>
+    val overlay: List<Resource>,
+    override val extraAttributes: Map<String, String> = emptyMap()
 ) : XMLEncodable, Identifiable {
     companion object : XMLDecodable<Scene> {
         override operator fun invoke(node: XMLNode): Scene {
+            val attributes = node.attributes.toMutableMap()
             val children = node.childrenToMap()
             return Scene(
-                id = node.attributes["id"]!!,
-                name = node.attributes["name"]!!,
+                id = attributes.remove("id")!!,
+                name = attributes.remove("name")!!,
                 base = children.getValue("base") { Resource(it) },
-                overlay = children.getValue("overlay") { Resource(it) })
+                overlay = children.getValue("overlay") { Resource(it) },
+                extraAttributes = attributes
+            )
         }
     }
 
@@ -24,7 +28,7 @@ data class Scene(
         attributes = mapOf(
             "id" to id,
             "name" to name
-        ),
+        ) + extraAttributes,
         body = XMLBody.Children(
             listOf(
                 XMLNode(

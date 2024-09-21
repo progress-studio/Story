@@ -6,13 +6,18 @@ import kr.progress.story.parser.XMLNode
 
 data class StringVariable(
     override val id: String,
-    val value: String
+    val value: String,
+    override val extraAttributes: Map<String, String> = emptyMap()
 ) : Variable() {
     companion object : XMLDecodable<StringVariable> {
-        override operator fun invoke(node: XMLNode) = StringVariable(
-            id = node.attributes["id"]!!,
-            value = (node.body as XMLBody.Value).body
-        )
+        override operator fun invoke(node: XMLNode): StringVariable {
+            val attributes = node.attributes.toMutableMap()
+            return StringVariable(
+                id = attributes.remove("id")!!,
+                value = (node.body as XMLBody.Value).body,
+                extraAttributes = attributes
+            )
+        }
 
         fun new(
             from: kr.progress.story.format.project.StringVariable,
@@ -24,7 +29,7 @@ data class StringVariable(
 
     override fun toXMLNode() = XMLNode(
         tag = "string",
-        attributes = mapOf("id" to id),
+        attributes = mapOf("id" to id) + extraAttributes,
         body = XMLBody.Value(value)
     )
 }

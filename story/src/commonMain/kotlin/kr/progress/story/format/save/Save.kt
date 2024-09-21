@@ -12,13 +12,15 @@ data class Save(
     val cleared: List<Story>,
     val date: LocalDateTime,
     val variables: List<Variable>,
-    val characters: List<Character>
+    val characters: List<Character>,
+    override val extraAttributes: Map<String, String> = emptyMap()
 ) : XMLEncodable {
     companion object : XMLDecodable<Save> {
         override operator fun invoke(node: XMLNode): Save {
+            val attributes = node.attributes.toMutableMap()
             val children = node.childrenToMap()
             return Save(
-                id = node.attributes["id"]!!,
+                id = attributes.remove("id")!!,
                 target = (node.body as XMLBody.Children)
                     .body
                     .firstOrNull { it.tag == "story" }?.let {
@@ -44,14 +46,15 @@ data class Save(
                     )
                 },
                 variables = children.getValue("variables") { Variable(it) },
-                characters = children.getValue("characters") { Character(it) }
+                characters = children.getValue("characters") { Character(it) },
+                extraAttributes = attributes
             )
         }
 
         @OptIn(ExperimentalUuidApi::class)
         fun new(
-            id: String = Uuid.random().toString(),
             project: Project,
+            id: String = Uuid.random().toString(),
             date: LocalDateTime = getCurrentDateTime()
         ) = Save(
             id = id,
@@ -85,7 +88,7 @@ data class Save(
 
     override fun toXMLNode() = XMLNode(
         tag = "save",
-        attributes = mapOf("id" to id),
+        attributes = mapOf("id" to id) + extraAttributes,
         body = XMLBody.Children(
             listOfNotNull(
                 target?.toXMLNode(),

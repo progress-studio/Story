@@ -15,21 +15,24 @@ sealed class DialogBody {
     ) : DialogBody() {
         data class Choice(
             val text: String,
-            val body: List<Intent>
+            val body: List<Intent>,
+            override val extraAttributes: Map<String, String> = emptyMap()
         ) : XMLEncodable {
             companion object : XMLDecodable<Choice> {
                 override fun invoke(node: XMLNode): Choice {
+                    val attributes = node.attributes.toMutableMap()
                     val body = node.body as XMLBody.Children
                     return Choice(
-                        text = node.attributes["body"]!!,
-                        body = body.body.map { Intent(it) }
+                        text = attributes.remove("body")!!,
+                        body = body.body.map { Intent(it) },
+                        extraAttributes = attributes
                     )
                 }
             }
 
             override fun toXMLNode() = XMLNode(
                 tag = "choice",
-                attributes = mapOf("body" to text),
+                attributes = mapOf("body" to text) + extraAttributes,
                 body = XMLBody.Children(
                     body.map { it.toXMLNode() }
                 )

@@ -6,14 +6,19 @@ import kr.progress.story.parser.XMLNode
 data class IntVariable(
     override val id: String,
     val name: String,
-    val default: Int?
+    val default: Int?,
+    override val extraAttributes: Map<String, String> = emptyMap()
 ) : Variable() {
     companion object : XMLDecodable<IntVariable> {
-        override operator fun invoke(node: XMLNode) = IntVariable(
-            id = node.attributes["id"]!!,
-            name = node.attributes["name"]!!,
-            default = node.attributes["default"]?.toInt()
-        )
+        override operator fun invoke(node: XMLNode): IntVariable {
+            val attributes = node.attributes.toMutableMap()
+            return IntVariable(
+                id = attributes.remove("id")!!,
+                name = attributes.remove("name")!!,
+                default = attributes.remove("default")?.toInt(),
+                extraAttributes = attributes
+            )
+        }
     }
 
     override fun toXMLNode() = XMLNode(
@@ -25,6 +30,6 @@ data class IntVariable(
             default?.toString()?.let {
                 this["default"] = it
             }
-        }
+        } + extraAttributes
     )
 }

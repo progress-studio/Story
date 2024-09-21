@@ -15,7 +15,7 @@ mavenPublishing {
     coordinates(
         groupId = "kr.progress.story",
         artifactId = "story",
-        version = "0.0.8"
+        version = "0.0.9"
     )
     configure(
         KotlinMultiplatform(

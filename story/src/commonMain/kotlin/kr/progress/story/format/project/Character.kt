@@ -7,17 +7,20 @@ data class Character(
     val name: String,
     val variable: List<Variable>,
     val base: List<Resource>,
-    val overlay: List<Resource>
+    val overlay: List<Resource>,
+    override val extraAttributes: Map<String, String> = emptyMap()
 ) : XMLEncodable, Identifiable {
     companion object : XMLDecodable<Character> {
         override operator fun invoke(node: XMLNode): Character {
+            val attributes = node.attributes.toMutableMap()
             val children = node.childrenToMap()
             return Character(
-                id = node.attributes["id"]!!,
-                name = node.attributes["name"]!!,
+                id = attributes.remove("id")!!,
+                name = attributes.remove("name")!!,
                 variable = children.getValue("variable") { Variable(it) },
                 base = children.getValue("base") { Resource(it) },
-                overlay = children.getValue("overlay") { Resource(it) }
+                overlay = children.getValue("overlay") { Resource(it) },
+                extraAttributes = attributes
             )
         }
     }
@@ -27,7 +30,7 @@ data class Character(
         attributes = mapOf(
             "id" to id,
             "name" to name
-        ),
+        ) + extraAttributes,
         body = XMLBody.Children(
             listOf(
                 XMLNode(

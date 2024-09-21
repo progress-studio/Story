@@ -4,13 +4,18 @@ import kr.progress.story.parser.*
 
 data class BooleanVariable(
     val id: String,
-    val body: Body
+    val body: Body,
+    override val extraAttributes: Map<String, String> = emptyMap()
 ) : Variable() {
     companion object : XMLDecodable<BooleanVariable> {
-        override fun invoke(node: XMLNode) = BooleanVariable(
-            id = node.attributes["id"]!!,
-            body = Body(node)
-        )
+        override fun invoke(node: XMLNode): BooleanVariable {
+            val attributes = node.attributes.toMutableMap()
+            return BooleanVariable(
+                id = attributes.remove("id")!!,
+                body = Body(node),
+                extraAttributes = attributes
+            )
+        }
     }
 
     override fun toXMLNode() = XMLNode(
@@ -20,7 +25,7 @@ data class BooleanVariable(
             is Body.SetValue -> mapOf(
                 "set" to body.value.toString()
             )
-        },
+        } + extraAttributes,
         body = if (body is Body.Conditional) body.condition.toChildren() else null
     )
 
