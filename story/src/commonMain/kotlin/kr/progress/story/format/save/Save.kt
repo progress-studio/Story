@@ -8,7 +8,6 @@ import kotlin.uuid.Uuid
 
 data class Save(
     val id: String,
-    val target: Target?,
     val cleared: List<Story>,
     val date: LocalDateTime,
     val variables: List<Variable>,
@@ -21,17 +20,9 @@ data class Save(
             val children = node.childrenToMap()
             return Save(
                 id = attributes.remove("id")!!,
-                target = (node.body as XMLBody.Children)
-                    .body
-                    .firstOrNull { it.tag == "story" }?.let {
-                        Story(it)
-                    } ?: node.body.body
-                    .firstOrNull { it.tag == "location" }?.let {
-                        Location(it)
-                    },
                 cleared = children.getValue("cleared") { Story(it) },
                 date = run {
-                    val date = node.body.body.first { it.tag == "date" }
+                    val date = (node.body as XMLBody.Children).body.first { it.tag == "date" }
                     val dateChildren = (date.body as XMLBody.Children)
                         .body
                         .groupBy { it.tag }
@@ -58,7 +49,6 @@ data class Save(
             date: LocalDateTime = getCurrentDateTime()
         ) = Save(
             id = id,
-            target = null,
             cleared = emptyList(),
             date = date,
             variables = project.variables
@@ -91,7 +81,6 @@ data class Save(
         attributes = mapOf("id" to id) + extraAttributes,
         body = XMLBody.Children(
             listOfNotNull(
-                target?.toXMLNode(),
                 cleared.takeIf { it.isNotEmpty() }?.let {
                     XMLNode(
                         tag = "cleared",

@@ -123,7 +123,6 @@ class StoryTest {
         val testData = """
             <?xml version="1.0" encoding="UTF-8"?>
             <save id="UUID">
-                <story id="1"/>
                 <cleared>
                     <story id="1"/>
                     <story id="2"/>
